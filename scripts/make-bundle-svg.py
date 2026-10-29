@@ -50,10 +50,14 @@ def svg(title: str, tagline: str, vials: list[tuple[str, str]]) -> str:
 
 
 out = Path("/workspace/public/images")
-(out / "gut-healing.svg").write_text(
-    svg("GUT &amp; HEALING STACK", "Gut lining + oxidative-stress support", [("BPC-157", "5 MG"), ("GLUTATHIONE", "5 MG")])
-)
-(out / "starter-pack.svg").write_text(
-    svg("STARTER PACK", "First vet-guided protocol pair", [("BPC-157", "5 MG"), ("B-COMPLEX", "5 MG")])
-)
-print("wrote bundle SVGs")
+bundles = [
+    ("joint-pack.svg", "JOINT &amp; RECOVERY PACK", "Joint, tendon and post-op support", [("BPC-157", "5 MG"), ("TB-500", "5 MG")]),
+    ("gut-healing.svg", "GUT &amp; HEALING STACK", "Gut lining + oxidative-stress support", [("BPC-157", "5 MG"), ("GLUTATHIONE", "5 MG")]),
+    ("starter-pack.svg", "STARTER PACK", "First vet-guided protocol pair", [("BPC-157", "5 MG"), ("B-COMPLEX", "5 MG")]),
+    ("senior-pack.svg", "SENIOR VITALITY PACK", "Cellular energy for aging dogs", [("NAD+", "5 MG"), ("GLUTATHIONE", "5 MG")]),
+    ("performance-pack.svg", "K9 PERFORMANCE PACK", "Recovery between high-output days", [("BPC-157", "5 MG"), ("TB-500", "5 MG"), ("NAD+", "5 MG")]),
+    ("cognitive-pack.svg", "COGNITIVE FOCUS PACK", "Training focus and mental sharpness", [("NAD+", "5 MG"), ("B-COMPLEX", "5 MG")]),
+]
+for filename, title, tagline, vials in bundles:
+    (out / filename).write_text(svg(title, tagline, vials))
+    print("wrote", filename)
