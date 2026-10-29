@@ -1,21 +1,31 @@
 import type { Metadata } from "next";
+import { Breadcrumbs } from "@/components/storefront/Breadcrumbs";
 import { Footer } from "@/components/storefront/Footer";
 import { Header } from "@/components/storefront/Header";
+import { JsonLd } from "@/components/storefront/JsonLd";
 import { listProducts } from "@/lib/catalog";
 import { CATEGORIES } from "@/lib/catalog-data";
+import { breadcrumbJsonLd, graphJsonLd, pageSeo } from "@/lib/seo";
 import { ShopFilters } from "./ui";
 
-const SITE = process.env.NEXT_PUBLIC_SITE_URL || "https://k9peptidesdirect.com";
+const crumbs = [
+  { name: "Home", path: "/" },
+  { name: "Shop", path: "/shop" },
+];
 
-export const metadata: Metadata = {
-  title: "Shop",
-  alternates: { canonical: `${SITE}/shop` },
-};
+export const metadata: Metadata = pageSeo({
+  title: "Shop Canine Peptides",
+  description:
+    "Shop research-grade canine peptides and protocol bundles. Lab-verified singles and goal-based packs sold for veterinary-guided research use.",
+  path: "/shop",
+  image: "/images/run.webp",
+});
 
 export default async function ShopPage() {
   const products = await listProducts();
   return (
     <>
+      <JsonLd data={graphJsonLd([breadcrumbJsonLd(crumbs)])} />
       <Header />
       <section className="ban" style={{ backgroundImage: "url(/images/run.webp)" }}>
         <div className="w">
@@ -27,7 +37,8 @@ export default async function ShopPage() {
       </section>
       <section className="sec">
         <div className="w">
-          <h2>Shop all peptides</h2>
+          <Breadcrumbs items={crumbs} />
+          <h2>All peptides and bundles</h2>
           <ShopFilters
             products={products.map((p) => ({
               id: p.id,

@@ -1,23 +1,30 @@
 import type { MetadataRoute } from "next";
 import { SEED_PRODUCTS } from "@/lib/catalog-data";
-
-const SITE = process.env.NEXT_PUBLIC_SITE_URL || "https://k9peptidesdirect.com";
+import { SEO_LASTMOD, SITE_URL } from "@/lib/seo";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const staticRoutes = ["", "/shop", "/bundles", "/dosing", "/about", "/faq", "/contact", "/cart", "/login"];
-  const now = new Date();
+  const lastModified = new Date(`${SEO_LASTMOD}T00:00:00.000Z`);
+  const staticRoutes: Array<{ path: string; priority: number; changeFrequency: MetadataRoute.Sitemap[number]["changeFrequency"] }> = [
+    { path: "/", priority: 1, changeFrequency: "weekly" },
+    { path: "/shop", priority: 0.9, changeFrequency: "weekly" },
+    { path: "/bundles", priority: 0.9, changeFrequency: "weekly" },
+    { path: "/dosing", priority: 0.7, changeFrequency: "monthly" },
+    { path: "/about", priority: 0.6, changeFrequency: "monthly" },
+    { path: "/faq", priority: 0.6, changeFrequency: "monthly" },
+    { path: "/contact", priority: 0.5, changeFrequency: "monthly" },
+  ];
   return [
-    ...staticRoutes.map((path) => ({
-      url: `${SITE}${path || "/"}`,
-      lastModified: now,
-      changeFrequency: "weekly" as const,
-      priority: path === "" ? 1 : 0.7,
+    ...staticRoutes.map((r) => ({
+      url: `${SITE_URL}${r.path === "/" ? "/" : r.path}`,
+      lastModified,
+      changeFrequency: r.changeFrequency,
+      priority: r.priority,
     })),
     ...SEED_PRODUCTS.map((p) => ({
-      url: `${SITE}/product/${p.slug}`,
-      lastModified: now,
+      url: `${SITE_URL}/product/${p.slug}`,
+      lastModified,
       changeFrequency: "weekly" as const,
-      priority: 0.8,
+      priority: p.category === "Bundles" ? 0.75 : 0.8,
     })),
   ];
 }

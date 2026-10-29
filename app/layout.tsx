@@ -1,15 +1,26 @@
 import type { Metadata } from "next";
 import { Reveal } from "@/components/storefront/Reveal";
-
-const SITE = process.env.NEXT_PUBLIC_SITE_URL || "https://k9peptidesdirect.com";
+import { DEFAULT_DESCRIPTION, DEFAULT_OG, SITE_NAME, SITE_URL, absUrl } from "@/lib/seo";
 
 export const metadata: Metadata = {
-  metadataBase: new URL(SITE),
-  title: { default: "K9 Peptides Direct", template: "%s | K9 Peptides Direct" },
-  description:
-    "Research-grade peptides formulated and dosed for canine wellness. Lab-verified, vet-informed.",
+  metadataBase: new URL(SITE_URL),
+  title: {
+    default: `${SITE_NAME} — Research-Grade Canine Peptides`,
+    template: `%s | ${SITE_NAME}`,
+  },
+  description: DEFAULT_DESCRIPTION,
   icons: { icon: "/favicon.svg" },
-  alternates: { canonical: "/" },
+  robots: { index: true, follow: true },
+  openGraph: {
+    type: "website",
+    siteName: SITE_NAME,
+    locale: "en_US",
+    images: [{ url: absUrl(DEFAULT_OG), alt: "Working dog — K9 Peptides Direct" }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    images: [absUrl(DEFAULT_OG)],
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

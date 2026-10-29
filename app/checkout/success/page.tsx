@@ -1,7 +1,9 @@
 import { Footer } from "@/components/storefront/Footer";
 import { Header } from "@/components/storefront/Header";
 
-export const metadata = { title: "Order request received" };
+import { noIndexSeo } from "@/lib/seo";
+
+export const metadata = noIndexSeo("Order request received", "/checkout/success");
 
 export default async function SuccessPage({
   searchParams,

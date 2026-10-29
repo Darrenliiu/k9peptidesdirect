@@ -19,8 +19,11 @@ export function ProductCard({ product }: { product: CardProduct }) {
       <div className="img">
         <img
           src={product.image}
-          alt={product.name}
+          alt={`${product.name} — ${product.category}`}
           loading="lazy"
+          width={480}
+          height={480}
+          decoding="async"
           style={{ width: "100%", height: "100%", objectFit: "cover" }}
         />
       </div>

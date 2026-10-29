@@ -1,14 +1,15 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { AddToCart } from "@/components/storefront/AddToCart";
+import { Breadcrumbs } from "@/components/storefront/Breadcrumbs";
 import { Footer } from "@/components/storefront/Footer";
 import { Header } from "@/components/storefront/Header";
+import { JsonLd } from "@/components/storefront/JsonLd";
 import { ProductCard } from "@/components/storefront/ProductCard";
 import { BUNDLE_INCLUDES } from "@/lib/catalog-data";
 import { getProductBySlug, listProducts, unitPrice } from "@/lib/catalog";
 import { formatMoney } from "@/lib/money";
-
-const SITE = process.env.NEXT_PUBLIC_SITE_URL || "https://k9peptidesdirect.com";
+import { breadcrumbJsonLd, graphJsonLd, pageSeo, productJsonLd } from "@/lib/seo";
 
 export async function generateMetadata({
   params,
@@ -17,12 +18,24 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { slug } = await params;
   const product = await getProductBySlug(slug);
-  const title = product?.name ?? "Product";
-  return {
+  if (!product) {
+    return pageSeo({
+      title: "Product not found",
+      description: "That product is no longer listed.",
+      path: `/product/${slug}`,
+      index: false,
+    });
+  }
+  const title =
+    product.category === "Bundles"
+      ? product.name
+      : `${product.name} for Dogs`;
+  return pageSeo({
     title,
-    description: product?.shortDescription,
-    alternates: { canonical: `${SITE}/product/${slug}` },
-  };
+    description: `${product.shortDescription} Research-grade and lab-verified. Sold for veterinary-guided research use only.`,
+    path: `/product/${product.slug}`,
+    image: product.image,
+  });
 }
 
 export default async function ProductPage({ params }: { params: Promise<{ slug: string }> }) {
@@ -41,35 +54,45 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
   ).slice(0, 3);
   const price = unitPrice(product, null);
   const title = product.category === "Bundles" ? product.name : `${product.name} for Dogs`;
-  const jsonLd = {
-    "@context": "https://schema.org",
-    "@type": "Product",
-    name: product.name,
-    description: product.description,
-    image: `${SITE}${product.image}`,
-    sku: product.sku,
-    brand: { "@type": "Brand", name: "K9 Peptides Direct" },
-    offers: {
-      "@type": "Offer",
-      priceCurrency: "USD",
-      price: (price / 100).toFixed(2),
-      availability: "https://schema.org/InStock",
-      url: `${SITE}/product/${product.slug}`,
-    },
-  };
+  const parent = product.category === "Bundles"
+    ? { name: "Bundles", path: "/bundles" }
+    : { name: "Shop", path: "/shop" };
+  const crumbs = [
+    { name: "Home", path: "/" },
+    parent,
+    { name: product.name, path: `/product/${product.slug}` },
+  ];
 
   return (
     <>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+      <JsonLd
+        data={graphJsonLd([
+          productJsonLd({
+            name: product.name,
+            description: product.description,
+            image: product.image,
+            sku: product.sku,
+            slug: product.slug,
+            priceCents: price,
+            stock: product.stock,
+          }),
+          breadcrumbJsonLd(crumbs),
+        ])}
+      />
       <Header />
       <section className="sec">
+        <div className="w">
+          <Breadcrumbs items={crumbs} />
+        </div>
         <div className="w pd">
           <div className="img card">
             <img
               src={product.image}
-              alt={product.name}
-              loading="lazy"
-              style={{ width: "100%", height: "100%", objectFit: "cover" }}
+              alt={`${product.name} — research-grade canine peptide`}
+              width={800}
+              height={800}
+              fetchPriority="high"
+              decoding="async"
             />
           </div>
           <div>
@@ -81,7 +104,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
             <p>{product.description}</p>
             {included.length ? (
               <div className="bundle-includes">
-                <h3 style={{ fontSize: 18, margin: "8px 0 10px" }}>What&apos;s included</h3>
+                <h2 style={{ fontSize: 18, margin: "8px 0 10px" }}>What&apos;s included</h2>
                 <ul>
                   {included.map((item) => (
                     <li key={item.id}>
