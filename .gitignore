@@ -1,6 +1,12 @@
+node_modules
+.next
+.env
+.env.local
+.env.*
+.vercel
+.neon
+*.log
 map.txt
 banhelper.py
-.env
-.env.*
-node_modules
-
+tsconfig.tsbuildinfo
+screens/backoffice
