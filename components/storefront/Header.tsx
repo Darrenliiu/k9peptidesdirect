@@ -204,16 +204,15 @@ export function Header() {
             </a>
 
             <div className="mob-extra">
-              <button
-                className="nav-link shop-acc"
-                type="button"
-                aria-expanded={mobileShop}
-                onClick={() => setMobileShop((v) => !v)}
+              <details
+                className="mob-shop-acc"
+                open={mobileShop}
+                onToggle={(e) => setMobileShop(e.currentTarget.open)}
               >
-                Shop
-                <span className="chev" aria-hidden />
-              </button>
-              {mobileShop ? (
+                <summary className="nav-link shop-acc" aria-expanded={mobileShop}>
+                  Shop
+                  <span className="chev" aria-hidden />
+                </summary>
                 <div className="mob-shop">
                   <p>Peptides</p>
                   {peptides.map((p) => (
@@ -230,7 +229,7 @@ export function Header() {
                   <a href="/shop">Shop all</a>
                   <a href="/bundles">View all bundles</a>
                 </div>
-              ) : null}
+              </details>
               <a className="nav-link" href="/dosing">
                 Research Guide
               </a>
