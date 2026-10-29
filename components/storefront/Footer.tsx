@@ -28,6 +28,7 @@ export function Footer() {
             <div>
               <h4>Learn</h4>
               <a href="/blog">Blog</a>
+              <a href="/coa">COAs</a>
               <a href="/dosing">Research Guide</a>
               <a href="/faq">FAQ</a>
               <a href="/about">About</a>

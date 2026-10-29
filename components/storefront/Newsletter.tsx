@@ -59,7 +59,7 @@ export function NewsletterForm({
   id,
   submitLabel,
 }: {
-  source: "cta" | "footer" | "popup";
+  source: "cta" | "footer" | "popup" | "coa";
   id: string;
   submitLabel: string;
 }) {

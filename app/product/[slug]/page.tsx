@@ -8,6 +8,7 @@ import { JsonLd } from "@/components/storefront/JsonLd";
 import { ProductCard } from "@/components/storefront/ProductCard";
 import { BUNDLE_INCLUDES } from "@/lib/catalog-data";
 import { getProductBySlug, listProducts, unitPrice } from "@/lib/catalog";
+import { listPublishedCoasForProduct, publicCoaPath } from "@/lib/coas";
 import { formatMoney } from "@/lib/money";
 import { breadcrumbJsonLd, graphJsonLd, pageSeo, productJsonLd } from "@/lib/seo";
 
@@ -47,6 +48,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
   const included = includeSlugs
     .map((s) => all.find((p) => p.slug === s))
     .filter((p): p is NonNullable<typeof p> => Boolean(p));
+  const publishedCoas = await listPublishedCoasForProduct(product.id);
   const paired = (
     included.length
       ? included
@@ -75,6 +77,11 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
             slug: product.slug,
             priceCents: price,
             stock: product.stock,
+            coas: publishedCoas.map((c) => ({
+              lot: c.lot,
+              purityPercent: c.purityPercent,
+              url: publicCoaPath(c.id),
+            })),
           }),
           breadcrumbJsonLd(crumbs),
         ])}
@@ -120,7 +127,11 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
             ) : null}
             <AddToCart product={product} />
             <p style={{ fontSize: 14 }}>
-              ✓ COA batch published &nbsp; ✓ Cold-pack shipping &nbsp; ✓ Vet screening included
+              {publishedCoas.length
+                ? `✓ Latest COA lot ${publishedCoas[0].lot}`
+                : "COA coming soon"}
+              {" · "}
+              ✓ Cold-pack shipping · ✓ Vet screening included
             </p>
             <details open>
               <summary>Research overview</summary>
@@ -140,9 +151,36 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
               <summary>What&apos;s in the box</summary>
               <p>{product.boxContents}</p>
             </details>
-            <details>
+            <details open={publishedCoas.length > 0}>
               <summary>Certificate of Analysis</summary>
-              <p>{product.coa}</p>
+              {publishedCoas.length ? (
+                <ul className="coa-product-list">
+                  {publishedCoas.map((c) => (
+                    <li key={c.id}>
+                      <strong>{c.lot}</strong>
+                      {c.testDate ? ` · ${c.testDate}` : ""}
+                      {c.purityPercent ? ` · ${c.purityPercent}%` : ""}
+                      {c.labName ? ` · ${c.labName}` : ""}
+                      {" — "}
+                      <a href={publicCoaPath(c.id)} target="_blank" rel="noopener noreferrer" style={{ color: "var(--blue)" }}>
+                        View
+                      </a>
+                      {" / "}
+                      <a href={publicCoaPath(c.id, { download: true })} style={{ color: "var(--blue)" }}>
+                        Download
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p>
+                  COA coming soon. Published lot files will appear here and in the{" "}
+                  <a href="/coa" style={{ color: "var(--blue)" }}>
+                    COA library
+                  </a>
+                  . Until then, no certificate should be inferred from this page.
+                </p>
+              )}
             </details>
           </div>
         </div>

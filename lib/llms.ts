@@ -1,11 +1,12 @@
 import { listArticles } from "./blog";
 import { SEED_PRODUCTS } from "./catalog-data";
 import { SITE_EMAIL, SITE_NAME, SITE_URL } from "./seo";
+import { publicCoaPath, type CoaWithProduct } from "./coas";
 
 const singles = SEED_PRODUCTS.filter((p) => p.category !== "Bundles");
 const bundles = SEED_PRODUCTS.filter((p) => p.category === "Bundles");
 
-export function llmsTxt() {
+export function llmsTxt(publishedCoas: CoaWithProduct[] = []) {
   const productLines = singles.map((p) => `- [${p.name}](${SITE_URL}/product/${p.slug}): ${p.shortDescription}`);
   const bundleLines = bundles.map((p) => `- [${p.name}](${SITE_URL}/product/${p.slug}): ${p.shortDescription}`);
   return `# ${SITE_NAME}
@@ -20,6 +21,7 @@ K9 Peptides Direct is a US storefront for lyophilized research peptides and prot
 - [Shop](${SITE_URL}/shop)
 - [Bundles](${SITE_URL}/bundles)
 - [Blog](${SITE_URL}/blog)
+- [Certificates of Analysis](${SITE_URL}/coa)
 - [Research guide](${SITE_URL}/dosing)
 - [About](${SITE_URL}/about)
 - [FAQ](${SITE_URL}/faq)
@@ -41,6 +43,17 @@ ${listArticles()
   .map((a) => `- [${a.title}](${SITE_URL}/blog/${a.slug}): ${a.excerpt}`)
   .join("\n")}
 
+## Certificates of Analysis
+
+Published lot files appear on the [COA library](${SITE_URL}/coa) and on each product page when a batch is released. Unpublished admin uploads are not listed.
+${
+  publishedCoas.length
+    ? publishedCoas
+        .map((c) => `- [${c.product.name} · ${c.lot}](${SITE_URL}${publicCoaPath(c.id)})`)
+        .join("\n")
+    : "- No lot files published yet."
+}
+
 ## Positioning
 
 - Research and veterinary-guided use only. Not for human consumption.
@@ -52,7 +65,7 @@ Contact: ${SITE_EMAIL}
 `;
 }
 
-export function llmsFullTxt() {
+export function llmsFullTxt(publishedCoas: CoaWithProduct[] = []) {
   const productBlocks = SEED_PRODUCTS.map((p) => {
     return `### ${p.name}
 - URL: ${SITE_URL}/product/${p.slug}
@@ -65,7 +78,7 @@ export function llmsFullTxt() {
   });
   return `# ${SITE_NAME} — full site brief
 
-${llmsTxt()}
+${llmsTxt(publishedCoas)}
 
 ## Brand
 
@@ -96,6 +109,7 @@ ${productBlocks.join("\n")}
 - ${SITE_URL}/product/senior-pack
 - ${SITE_URL}/product/performance-pack
 - ${SITE_URL}/product/cognitive-pack
+- ${SITE_URL}/coa
 - ${SITE_URL}/blog
 ${listArticles()
   .map((a) => `- ${SITE_URL}/blog/${a.slug}`)

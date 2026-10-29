@@ -173,3 +173,16 @@ footer .w>.foot-legal{display:block;margin-top:30px;padding-top:18px;border-top:
  .blog-card-title{font-size:16px}
  .blog-grid{grid-template-columns:1fr}
 }
+
+.coa-filters{display:flex;flex-wrap:wrap;gap:10px;margin:18px 0 24px;align-items:stretch}
+.coa-filters select,.coa-filters input{margin:0;min-width:220px;flex:1}
+.coa-table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.coa-table{width:100%;border-collapse:collapse;background:#fff;border:1px solid var(--line);border-radius:14px}
+.coa-table th,.coa-table td{text-align:left;padding:12px 14px;border-bottom:1px solid var(--line);font-size:15px}
+.coa-table th{font-size:12px;text-transform:uppercase;letter-spacing:.04em;color:#5b6278}
+.coa-soon{margin-top:8px;padding:28px;background:var(--bg);border:1px solid var(--line);border-radius:18px}
+.coa-soon h2{margin-top:12px}
+.coa-soon .grid{margin:22px 0}
+.coa-notify{margin-top:8px;padding-top:8px;max-width:520px}
+.coa-product-list{margin:8px 0 0;padding-left:18px}
+.coa-product-list li{margin:8px 0}

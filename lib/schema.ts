@@ -202,6 +202,23 @@ export const orderItems = pgTable("order_items", {
   image: text("image"),
 });
 
+export const coas = pgTable("coas", {
+  id: text("id").primaryKey(),
+  productId: text("product_id")
+    .notNull()
+    .references(() => products.id, { onDelete: "cascade" }),
+  lot: text("lot").notNull(),
+  testDate: text("test_date"),
+  labName: text("lab_name"),
+  purityPercent: text("purity_percent"),
+  fileUrl: text("file_url").notNull(),
+  filePath: text("file_path").notNull(),
+  fileName: text("file_name").notNull().default(""),
+  contentType: text("content_type").notNull().default("application/pdf"),
+  published: boolean("published").notNull().default(false),
+  createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+});
+
 export const orderNotes = pgTable("order_notes", {
   id: text("id").primaryKey(),
   orderId: text("order_id")
@@ -223,4 +240,5 @@ export type ShippingZone = typeof shippingZones.$inferSelect;
 export type ShippingMethod = typeof shippingMethods.$inferSelect;
 export type StoreSettings = typeof storeSettings.$inferSelect;
 export type OrderNote = typeof orderNotes.$inferSelect;
+export type Coa = typeof coas.$inferSelect;
 export type UserRow = typeof user.$inferSelect;
