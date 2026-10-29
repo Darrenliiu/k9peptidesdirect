@@ -1,5 +1,6 @@
 import { Footer } from "@/components/storefront/Footer";
 import { Header } from "@/components/storefront/Header";
+import { NewsletterCta } from "@/components/storefront/Newsletter";
 import { Disclaimer, ProductCard } from "@/components/storefront/ProductCard";
 import { featuredProducts } from "@/lib/catalog";
 import { ensureReady } from "@/lib/ensure";
@@ -179,6 +180,7 @@ export default async function HomePage() {
           </div>
         </div>
       </section>
+      <NewsletterCta />
       <section className="sec">
         <div className="w">
           <Disclaimer />
