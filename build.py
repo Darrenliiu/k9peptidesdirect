@@ -167,10 +167,10 @@ footer .nl-status.err{color:#ffb4ac}
 .nl-pop-card:before{content:'';position:absolute;left:0;right:0;top:0;height:3px;background:linear-gradient(90deg,var(--blue),var(--navy));z-index:2}
 .nl-pop-card .nl-bg{position:absolute;inset:0 auto auto 0;width:100%;height:220px;z-index:0;pointer-events:none}
 .nl-pop-card .nl-bg-art{width:100%;height:100%;display:block}
-.nl-pop-card>*:not(.nl-bg){position:relative;z-index:1}
+.nl-pop-card>:not(.nl-bg):not(.nl-x){position:relative;z-index:1}
 .nl-pop-card h2{font-size:28px;margin:10px 0 8px;color:var(--navy)}
 .nl-pop-card>p{margin:0 0 18px;color:#4a5168}
-.nl-x{position:absolute;top:12px;right:12px;width:40px;height:40px;border:0;background:#fff;border-radius:10px;font-size:24px;line-height:1;color:var(--navy);cursor:pointer;z-index:2;box-shadow:0 1px 0 #00336614}
+.nl-pop-card .nl-x{position:absolute;top:12px;right:12px;width:40px;height:40px;border:0;background:#fff;border-radius:10px;font-size:24px;line-height:1;color:var(--navy);cursor:pointer;z-index:2;box-shadow:0 1px 0 #00336614}
 .nl-x:hover,.nl-x:focus-visible{background:var(--sky);outline:2px solid var(--blue);outline-offset:2px}
 @media(max-width:960px){footer .w>div{grid-template-columns:1fr 1fr}footer .nl-foot{grid-column:1/-1}}
 @media(max-width:820px){.nl-cta-box{grid-template-columns:1fr;gap:22px}.nl-cta .nl-bg{opacity:.55}footer .w>div{grid-template-columns:1fr 1fr}footer .nl-foot{grid-column:1/-1}}
