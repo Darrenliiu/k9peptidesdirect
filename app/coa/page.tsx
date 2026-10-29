@@ -114,7 +114,7 @@ export default async function CoaLibraryPage({
                           View
                         </a>
                         {" · "}
-                        <a href={publicCoaPath(row.id)} download={row.fileName || `${row.lot}.pdf`}>
+                        <a href={publicCoaPath(row.id, { download: true })}>
                           Download
                         </a>
                       </td>

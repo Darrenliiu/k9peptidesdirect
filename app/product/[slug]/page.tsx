@@ -166,7 +166,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
                         View
                       </a>
                       {" / "}
-                      <a href={publicCoaPath(c.id)} download={c.fileName || `${c.lot}.pdf`} style={{ color: "var(--blue)" }}>
+                      <a href={publicCoaPath(c.id, { download: true })} style={{ color: "var(--blue)" }}>
                         Download
                       </a>
                     </li>

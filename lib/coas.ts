@@ -1,3 +1,4 @@
+import { get } from "@vercel/blob";
 import { and, desc, eq, ilike, or } from "drizzle-orm";
 import { getDb, hasDatabase } from "./db";
 import { ensureReady } from "./ensure";
@@ -5,8 +6,32 @@ import { coas, products, type Coa, type Product } from "./schema";
 
 export type CoaWithProduct = Coa & { product: Product };
 
-export function publicCoaPath(id: string) {
-  return `/coa/files/${id}`;
+export function publicCoaPath(id: string, opts?: { download?: boolean }) {
+  return opts?.download ? `/coa/files/${id}?download=1` : `/coa/files/${id}`;
+}
+
+export function adminCoaPath(id: string) {
+  return `/admin/coas/file/${id}`;
+}
+
+function safeFilename(name: string) {
+  return name.replace(/[^\w.\-]+/g, "-").slice(0, 80) || "coa.pdf";
+}
+
+export async function streamCoaFile(coa: Coa, opts?: { download?: boolean; index?: boolean }) {
+  const result = await get(coa.filePath || coa.fileUrl, {
+    access: "private",
+    token: process.env.BLOB_READ_WRITE_TOKEN,
+  });
+  if (!result?.stream) return null;
+  const filename = safeFilename(coa.fileName || `${coa.lot}.pdf`);
+  const type = coa.contentType || (result.statusCode === 200 ? result.blob.contentType : null) || "application/pdf";
+  const headers = new Headers();
+  headers.set("Content-Type", type);
+  headers.set("Content-Disposition", `${opts?.download ? "attachment" : "inline"}; filename="${filename}"`);
+  headers.set("Cache-Control", opts?.index ? "public, max-age=300" : "private, max-age=60");
+  if (!opts?.index) headers.set("X-Robots-Tag", "noindex");
+  return new Response(result.stream, { headers });
 }
 
 export async function listPublishedCoas(opts?: { productId?: string; q?: string }): Promise<CoaWithProduct[]> {

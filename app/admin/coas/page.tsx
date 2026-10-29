@@ -1,6 +1,6 @@
 import { createCoaAction, deleteCoaAction, toggleCoaAction } from "@/app/actions/coas";
 import { searchAdminProducts } from "@/lib/catalog";
-import { listAdminCoas } from "@/lib/coas";
+import { adminCoaPath, listAdminCoas } from "@/lib/coas";
 
 export default async function AdminCoasPage({
   searchParams,
@@ -86,7 +86,7 @@ export default async function AdminCoasPage({
             <tr key={row.id}>
               <td>{row.product.name}</td>
               <td>
-                <a href={row.fileUrl} target="_blank" rel="noopener noreferrer">
+                <a href={adminCoaPath(row.id)} target="_blank" rel="noopener noreferrer">
                   {row.lot}
                 </a>
               </td>

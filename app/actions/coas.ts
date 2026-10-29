@@ -59,7 +59,7 @@ export async function createCoaAction(formData: FormData) {
 
   const safeName = file.name.replace(/[^\w.\-]+/g, "-").slice(0, 80) || "coa.pdf";
   const uploaded = await put(`coas/${productId}/${lot}-${safeName}`, file, {
-    access: "public",
+    access: "private",
     addRandomSuffix: true,
     contentType,
     token: process.env.BLOB_READ_WRITE_TOKEN,
