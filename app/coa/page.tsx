@@ -4,7 +4,7 @@ import { Header } from "@/components/storefront/Header";
 import { JsonLd } from "@/components/storefront/JsonLd";
 import { NewsletterForm } from "@/components/storefront/Newsletter";
 import { listProducts } from "@/lib/catalog";
-import { listPublishedCoas, publicCoaPath } from "@/lib/coas";
+import { ACS_SUPPLIER_NOTE, listPublishedCoas, publicCoaPath } from "@/lib/coas";
 import { breadcrumbJsonLd, graphJsonLd, pageSeo } from "@/lib/seo";
 
 const crumbs = [
@@ -62,6 +62,7 @@ export default async function CoaLibraryPage({
             </a>
             . Products remain for research and veterinary-guided use only.
           </p>
+          <p className="coa-source-note">{ACS_SUPPLIER_NOTE}</p>
 
           <form className="coa-filters" method="get" action="/coa">
             <label>
