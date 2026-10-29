@@ -90,6 +90,9 @@ export function CheckoutForm({ email: initialEmail }: { email: string }) {
           },
           shippingMethodId: methodId,
           customerNote: String(fd.get("note") || ""),
+          dogName: String(fd.get("dogName") || ""),
+          dogWeight: String(fd.get("dogWeight") || ""),
+          contactMethod: String(fd.get("contactMethod") || "email") as "email" | "phone" | "text",
           vetConfirmed: vet,
         });
         setBusy(false);
@@ -103,19 +106,29 @@ export function CheckoutForm({ email: initialEmail }: { email: string }) {
       }}
     >
       <div>
-        <h2>Shipping</h2>
-        <input name="firstName" placeholder="First name" required />
-        <input name="lastName" placeholder="Last name" required />
+        <h2>Contact & shipping</h2>
+        <input name="firstName" placeholder="First name" required autoComplete="given-name" />
+        <input name="lastName" placeholder="Last name" required autoComplete="family-name" />
         <input
           type="email"
           placeholder="Email"
           required
+          autoComplete="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
-        <input name="line1" placeholder="Address" required />
-        <input name="line2" placeholder="Apartment, suite (optional)" />
-        <input name="city" placeholder="City" required />
+        <input name="phone" type="tel" placeholder="Phone" required autoComplete="tel" />
+        <label>
+          Preferred contact method
+          <select name="contactMethod" defaultValue="email">
+            <option value="email">Email</option>
+            <option value="phone">Phone call</option>
+            <option value="text">Text message</option>
+          </select>
+        </label>
+        <input name="line1" placeholder="Address" required autoComplete="address-line1" />
+        <input name="line2" placeholder="Apartment, suite (optional)" autoComplete="address-line2" />
+        <input name="city" placeholder="City" required autoComplete="address-level2" />
         <select value={country} onChange={(e) => setCountry(e.target.value)}>
           <option value="US">United States</option>
           <option value="CA">Canada</option>
@@ -125,9 +138,11 @@ export function CheckoutForm({ email: initialEmail }: { email: string }) {
             <option key={s}>{s}</option>
           ))}
         </select>
-        <input name="postalCode" placeholder="ZIP / Postal code" required />
-        <input name="phone" placeholder="Phone" />
-        <textarea name="note" rows={3} placeholder="Order notes (optional)" />
+        <input name="postalCode" placeholder="ZIP / Postal code" required autoComplete="postal-code" />
+        <h2>Your dog (optional)</h2>
+        <input name="dogName" placeholder="Dog name" />
+        <input name="dogWeight" placeholder="Weight (e.g. 48 lb)" />
+        <textarea name="note" rows={3} placeholder="Notes for the team (optional)" />
         <label>
           <input
             type="checkbox"
@@ -139,11 +154,22 @@ export function CheckoutForm({ email: initialEmail }: { email: string }) {
         </label>
       </div>
       <div className="card" style={{ padding: 24, alignSelf: "start" }}>
-        <h3>Payment</h3>
+        <h3>Request summary</h3>
         <p style={{ fontSize: 14 }}>
-          Test checkout is enabled. No card numbers are collected or stored. Connect Stripe later
-          with test keys to take real (test-mode) payments.
+          No payment is collected now. After you submit, we follow up to confirm the items and
+          arrange payment. Crypto checkout can be added later; this request is the live path today.
         </p>
+        {lines.length ? (
+          <ul style={{ paddingLeft: 18, fontSize: 14 }}>
+            {lines.map((l) => (
+              <li key={`${l.productId}-${l.variantId ?? ""}`}>
+                {l.name ?? l.productId} ×{l.quantity} — {formatMoney((l.unitPriceCents ?? 0) * l.quantity)}
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p style={{ fontSize: 14 }}>Your cart is empty.</p>
+        )}
         {methods.map((m) => (
           <label key={m.id}>
             <input
@@ -159,13 +185,13 @@ export function CheckoutForm({ email: initialEmail }: { email: string }) {
         <p>
           Subtotal {formatMoney(subtotal)}
           <br />
-          Shipping {formatMoney(shipping)}
+          Shipping estimate {formatMoney(shipping)}
           <br />
-          <span className="price">Total {formatMoney(subtotal + shipping)}</span>
+          <span className="price">Estimated total {formatMoney(subtotal + shipping)}</span>
         </p>
         {error ? <p className="disc">{error}</p> : null}
         <button className="btn" type="submit" disabled={busy || !lines.length} style={{ width: "100%" }}>
-          {busy ? "Placing order…" : "Place test order"}
+          {busy ? "Sending request…" : "Request Order"}
         </button>
       </div>
     </form>

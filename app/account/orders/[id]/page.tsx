@@ -21,7 +21,8 @@ export default async function AccountOrder({ params }: { params: Promise<{ id: s
     <>
       <h1>{order.number}</h1>
       <p>
-        Status: <b>{order.status}</b> · Payment: {order.paymentStatus}
+        Status: <b>{order.status}</b> ·{" "}
+        {order.paymentStatus === "unpaid" ? "No payment taken yet" : `Payment: ${order.paymentStatus}`}
       </p>
       {order.trackingNumber ? (
         <p>

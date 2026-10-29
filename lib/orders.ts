@@ -1,20 +1,50 @@
-import { and, desc, eq, gte, ilike, lte, or } from "drizzle-orm";
+import { and, desc, eq, gte, ilike, lte, or, sql } from "drizzle-orm";
 import { getDb, query } from "./db";
 import { ensureReady } from "./ensure";
 import { orderItems, orderNotes, orders, type Order, type OrderItem, type OrderNote } from "./schema";
 
+export const WORKFLOW_STATUSES = [
+  "requested",
+  "contacted",
+  "confirmed",
+  "shipped",
+  "cancelled",
+] as const;
+
+/** Includes legacy stub statuses so older rows remain filterable. */
 export const ORDER_STATUSES = [
+  ...WORKFLOW_STATUSES,
   "pending",
   "processing",
-  "shipped",
   "delivered",
-  "cancelled",
   "refunded",
 ] as const;
 
 export type OrderStatus = (typeof ORDER_STATUSES)[number];
 
 export type FullOrder = Order & { items: OrderItem[]; notes: OrderNote[] };
+
+export function statusLabel(status: string) {
+  const labels: Record<string, string> = {
+    requested: "Requested",
+    contacted: "Contacted",
+    confirmed: "Confirmed / paid",
+    shipped: "Shipped",
+    cancelled: "Cancelled",
+    pending: "Pending",
+    processing: "Processing",
+    delivered: "Delivered",
+    refunded: "Refunded",
+  };
+  return labels[status] ?? status;
+}
+
+export function paymentLabel(status: string) {
+  if (status === "unpaid") return "No payment yet";
+  if (status === "paid") return "Paid";
+  if (status === "failed") return "Failed";
+  return status;
+}
 
 export async function listOrders(opts: {
   q?: string;
@@ -41,7 +71,16 @@ export async function listOrders(opts: {
     .select()
     .from(orders)
     .where(filters.length ? and(...filters) : undefined)
-    .orderBy(desc(orders.createdAt));
+    .orderBy(sql`case when ${orders.status} = 'requested' then 0 else 1 end`, desc(orders.createdAt));
+}
+
+export async function countOrdersByStatus(status: string) {
+  await ensureReady();
+  const [row] = await query<{ n: number }>(
+    "select count(*)::int as n from orders where status = $1",
+    [status],
+  );
+  return row?.n ?? 0;
 }
 
 export async function getOrder(id: string): Promise<FullOrder | null> {
@@ -65,12 +104,18 @@ export async function getOrderByNumber(number: string, email?: string) {
 
 export async function dashboardStats() {
   await ensureReady();
-  const [sales] = await query<{ revenue: number; orders_30: number; open_orders: number }>(`
+  const [sales] = await query<{
+    revenue: number;
+    orders_30: number;
+    open_orders: number;
+    requested: number;
+  }>(`
     select
       coalesce(sum(total_cents) filter (where payment_status = 'paid' and status not in ('cancelled','refunded')), 0)::int as revenue,
       count(*) filter (where created_at >= now() - interval '30 days')::int as orders_30,
-      count(*) filter (where status = 'pending' or status = 'processing')::int as open_orders
+      count(*) filter (where status in ('requested','contacted','pending','processing'))::int as open_orders,
+      count(*) filter (where status = 'requested')::int as requested
     from orders
   `);
-  return sales ?? { revenue: 0, orders_30: 0, open_orders: 0 };
+  return sales ?? { revenue: 0, orders_30: 0, open_orders: 0, requested: 0 };
 }

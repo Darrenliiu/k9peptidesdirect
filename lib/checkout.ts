@@ -1,12 +1,12 @@
 import { randomUUID } from "node:crypto";
-import { eq, sql } from "drizzle-orm";
+import { eq } from "drizzle-orm";
 import { getDb } from "./db";
 import { ensureReady } from "./ensure";
 import { getProductById, unitPrice } from "./catalog";
 import { getPaymentProvider } from "./payments";
 import { getSettings, quoteShipping, taxCents, type AddressInput } from "./shipping";
-import { notifyOrder } from "./email";
-import { orderItems, orders, products } from "./schema";
+import { notifyOrder, notifyOrderRequest } from "./email";
+import { orderItems, orders } from "./schema";
 
 export type CartLine = {
   productId: string;
@@ -25,6 +25,9 @@ export type PostedAddress = AddressInput & {
   phone?: string;
 };
 
+export const CONTACT_METHODS = ["email", "phone", "text"] as const;
+export type ContactMethod = (typeof CONTACT_METHODS)[number];
+
 export async function priceCart(lines: CartLine[]) {
   const priced = [];
   let subtotal = 0;
@@ -42,10 +45,6 @@ export async function priceCart(lines: CartLine[]) {
       lineDiscount = Math.round(unit * 0.15);
       unit -= lineDiscount;
     }
-    const available = variant?.stock ?? product.stock;
-    if (available < qty) {
-      throw new Error(`${product.name} does not have enough stock.`);
-    }
     subtotal += unit * qty + lineDiscount * qty;
     discount += lineDiscount * qty;
     priced.push({
@@ -59,6 +58,13 @@ export async function priceCart(lines: CartLine[]) {
   return { priced, subtotalCents: subtotal, discountCents: discount };
 }
 
+function paymentToOrder(status: string) {
+  if (status === "paid") return { paymentStatus: "paid" as const, status: "confirmed" as const };
+  if (status === "failed") return { paymentStatus: "failed" as const, status: "requested" as const };
+  if (status === "requested") return { paymentStatus: "unpaid" as const, status: "requested" as const };
+  return { paymentStatus: "unpaid" as const, status: "pending" as const };
+}
+
 export async function createOrder(input: {
   lines: CartLine[];
   email: string;
@@ -67,6 +73,9 @@ export async function createOrder(input: {
   billing?: PostedAddress | null;
   shippingMethodId?: string;
   customerNote?: string;
+  dogName?: string;
+  dogWeight?: string;
+  contactMethod?: ContactMethod | string;
   vetConfirmed: boolean;
 }) {
   if (!input.vetConfirmed) {
@@ -75,6 +84,10 @@ export async function createOrder(input: {
   const email = input.email.trim().toLowerCase();
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
     throw new Error("Enter a valid email address.");
+  }
+  const phone = (input.shipping.phone ?? "").trim();
+  if (phone.length < 7) {
+    throw new Error("Enter a phone number so we can follow up.");
   }
   await ensureReady();
   const { priced, subtotalCents, discountCents } = await priceCart(input.lines);
@@ -97,13 +110,16 @@ export async function createOrder(input: {
   const { query } = await import("./db");
   const seq = await query<{ nextval: string }>("select nextval('order_number_seq')::text as nextval");
   const number = `K9-${seq[0]?.nextval ?? Date.now()}`;
+  const contactMethod = CONTACT_METHODS.includes(input.contactMethod as ContactMethod)
+    ? (input.contactMethod as ContactMethod)
+    : "email";
 
   await db.insert(orders).values({
     id,
     number,
     userId: input.userId ?? null,
     email,
-    status: "pending",
+    status: "requested",
     paymentStatus: "unpaid",
     subtotalCents,
     shippingCents,
@@ -114,6 +130,9 @@ export async function createOrder(input: {
     shippingAddress: input.shipping,
     billingAddress: input.billing ?? input.shipping,
     customerNote: input.customerNote || null,
+    dogName: input.dogName?.trim() || null,
+    dogWeight: input.dogWeight?.trim() || null,
+    contactMethod,
     vetConfirmed: true,
   });
 
@@ -132,10 +151,6 @@ export async function createOrder(input: {
       unitPriceCents: line.unitPriceCents,
       image: line.product.image,
     });
-    await db
-      .update(products)
-      .set({ stock: sql`${products.stock} - ${line.quantity}` })
-      .where(eq(products.id, line.product.id));
   }
 
   const provider = await getPaymentProvider();
@@ -147,24 +162,37 @@ export async function createOrder(input: {
     currency: settings.currency,
   });
 
+  const mapped = paymentToOrder(payment.status);
   await db
     .update(orders)
     .set({
       paymentProvider: payment.provider,
       paymentRef: payment.reference,
-      paymentStatus: payment.status === "paid" ? "paid" : payment.status === "failed" ? "failed" : "unpaid",
-      status: payment.status === "paid" ? "processing" : "pending",
+      paymentStatus: mapped.paymentStatus,
+      status: mapped.status,
       updatedAt: new Date(),
     })
     .where(eq(orders.id, id));
 
-  if (payment.status === "paid") {
+  const customerName = `${input.shipping.firstName} ${input.shipping.lastName}`.trim();
+  if (payment.status === "requested") {
+    await notifyOrderRequest({
+      to: settings.notificationEmail,
+      orderNumber: number,
+      email,
+      customerName,
+      phone,
+      contactMethod,
+      totalCents: total,
+      shippingCents,
+    });
+  } else if (payment.status === "paid") {
     await notifyOrder({
       to: settings.notificationEmail,
       orderNumber: number,
       email,
       totalCents: total,
-      status: "processing",
+      status: mapped.status,
     });
   }
 
@@ -188,7 +216,7 @@ export async function markOrderPaid(orderId: string, reference: string) {
     .set({
       paymentStatus: "paid",
       paymentRef: reference,
-      status: "processing",
+      status: "confirmed",
       updatedAt: new Date(),
     })
     .where(eq(orders.id, orderId));

@@ -1,26 +1,51 @@
+export type PaymentStatus = "requested" | "pending" | "paid" | "failed";
+
 export type PaymentIntent = {
   provider: string;
-  status: "paid" | "pending" | "failed";
+  status: PaymentStatus;
   reference: string;
   clientSecret?: string;
+  /** Present when a later provider (Stripe / crypto) needs an off-site hop. */
+  checkoutUrl?: string;
+};
+
+export type CreatePaymentInput = {
+  orderId: string;
+  orderNumber: string;
+  email: string;
+  amountCents: number;
+  currency: string;
 };
 
 export type PaymentProvider = {
   id: string;
-  createPayment: (input: {
-    orderId: string;
-    orderNumber: string;
-    email: string;
-    amountCents: number;
-    currency: string;
-  }) => Promise<PaymentIntent>;
-  parseWebhook?: (rawBody: string, signature: string | null) => Promise<{
+  createPayment: (input: CreatePaymentInput) => Promise<PaymentIntent>;
+  parseWebhook?: (
+    rawBody: string,
+    signature: string | null,
+  ) => Promise<{
     orderId: string;
     status: "paid" | "failed";
     reference: string;
   }>;
 };
 
+/**
+ * Default go-live provider. No money is collected; the order is a request
+ * the team confirms and invoices later.
+ */
+const requestProvider: PaymentProvider = {
+  id: "request",
+  async createPayment(input) {
+    return {
+      provider: "request",
+      status: "requested",
+      reference: `req_${input.orderId}`,
+    };
+  },
+};
+
+/** Kept for local scripts. Does not collect a card; marks the intent paid. */
 const stub: PaymentProvider = {
   id: "stub",
   async createPayment(input) {
@@ -31,6 +56,17 @@ const stub: PaymentProvider = {
     };
   },
 };
+
+/**
+ * Hook for a later Coinbase Commerce / NOWPayments / BTCPay integration.
+ * Selecting PAYMENT_PROVIDER=crypto (or a named provider) throws until a
+ * real adapter is wired here — do not invent invoices.
+ */
+export async function createCryptoInvoice(_input: CreatePaymentInput): Promise<PaymentIntent> {
+  throw new Error(
+    "Crypto checkout is not enabled yet. Keep PAYMENT_PROVIDER=request until a Coinbase Commerce, NOWPayments, or BTCPay adapter is added.",
+  );
+}
 
 async function stripeProvider(): Promise<PaymentProvider> {
   const key = process.env.STRIPE_SECRET_KEY;
@@ -97,17 +133,31 @@ async function stripeProvider(): Promise<PaymentProvider> {
   };
 }
 
+const CRYPTO_ALIASES = new Set(["crypto", "coinbase", "nowpayments", "btcpay"]);
+
+export function paymentProviderName() {
+  return (process.env.PAYMENT_PROVIDER ?? "request").toLowerCase();
+}
+
 export async function getPaymentProvider(): Promise<PaymentProvider> {
-  const name = (process.env.PAYMENT_PROVIDER ?? "stub").toLowerCase();
+  const name = paymentProviderName();
   if (name === "stripe" && process.env.STRIPE_SECRET_KEY) {
     return stripeProvider();
   }
-  return stub;
+  if (CRYPTO_ALIASES.has(name)) {
+    return {
+      id: name,
+      createPayment: createCryptoInvoice,
+    };
+  }
+  if (name === "stub") return stub;
+  return requestProvider;
 }
 
 export function paymentMode() {
-  if ((process.env.PAYMENT_PROVIDER ?? "stub") === "stripe" && process.env.STRIPE_SECRET_KEY) {
-    return "stripe" as const;
-  }
-  return "stub" as const;
+  const name = paymentProviderName();
+  if (name === "stripe" && process.env.STRIPE_SECRET_KEY) return "stripe" as const;
+  if (CRYPTO_ALIASES.has(name)) return "crypto" as const;
+  if (name === "stub") return "stub" as const;
+  return "request" as const;
 }

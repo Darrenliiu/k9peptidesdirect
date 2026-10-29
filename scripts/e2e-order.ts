@@ -26,13 +26,19 @@ async function main() {
       state: "TX",
       postalCode: "78701",
       country: "US",
+      phone: "5125550100",
     },
+    dogName: "Scout",
+    dogWeight: "42 lb",
+    contactMethod: "email",
     vetConfirmed: true,
   });
   if (order.shippingCents !== 0) throw new Error(`expected free ship, got ${order.shippingCents}`);
-  if (order.payment.status !== "paid") throw new Error("stub payment should mark paid");
+  if (order.payment.status !== "requested") throw new Error("request provider should not collect payment");
   const loaded = await getOrder(order.id);
   if (!loaded || loaded.items.length !== 1) throw new Error("order items missing");
+  if (loaded.status !== "requested") throw new Error("order should start as requested");
+  if (loaded.dogName !== "Scout") throw new Error("dog name missing");
   const listed = await listOrders({ q: "guest.owner" });
   if (!listed.length) throw new Error("order list miss");
   console.log("e2e ok", order.number, "total", order.totalCents, "ship", order.shippingCents);

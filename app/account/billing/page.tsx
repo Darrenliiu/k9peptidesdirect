@@ -5,12 +5,8 @@ export default function BillingPage() {
     <>
       <h1>Billing</h1>
       <p>
-        Card numbers are never stored on this site. When Stripe is connected, you&apos;ll manage saved
-        cards in Stripe&apos;s customer portal.
-      </p>
-      <p className="disc">
-        Right now checkout uses a test/stub payment so you can place and track orders without
-        entering card data.
+        Card numbers are never stored on this site. Checkout is a request flow — no payment is
+        taken until the team follows up. A crypto or card provider can plug in later.
       </p>
     </>
   );
