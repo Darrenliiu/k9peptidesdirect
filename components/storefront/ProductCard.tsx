@@ -44,13 +44,3 @@ export function ProductCard({ product }: { product: CardProduct }) {
     </a>
   );
 }
-
-export function Disclaimer() {
-  return (
-    <div className="disc">
-      <b>Important:</b> Products are sold for research and veterinary-guided use only. Not intended
-      to diagnose, treat, cure or prevent any disease. Always consult a licensed veterinarian before
-      starting any peptide protocol. Statements have not been evaluated by the FDA.
-    </div>
-  );
-}
