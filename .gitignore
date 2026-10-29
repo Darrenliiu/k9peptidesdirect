@@ -1,2 +1,6 @@
 map.txt
 banhelper.py
+.env
+.env.*
+node_modules
+

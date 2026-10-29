@@ -1,0 +1,8 @@
+{
+  "name": "k9peptidesdirect",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "@vercel/blob": "^1.1.1"
+  }
+}
