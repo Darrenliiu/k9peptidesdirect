@@ -2,10 +2,11 @@ import { redirect } from "next/navigation";
 import { Footer } from "@/components/storefront/Footer";
 import { Header } from "@/components/storefront/Header";
 import { isAdminUser } from "@/lib/roles";
+import { noIndexSeo } from "@/lib/seo";
 import { getSession } from "@/lib/session";
 import { AuthForm } from "./ui";
 
-export const metadata = { title: "Login" };
+export const metadata = noIndexSeo("Login", "/login");
 
 export default async function LoginPage({
   searchParams,

@@ -1,9 +1,12 @@
+import { noIndexSeo } from "@/lib/seo";
 import { redirect } from "next/navigation";
 import { Footer } from "@/components/storefront/Footer";
 import { Header } from "@/components/storefront/Header";
 import { signOutAction } from "@/app/actions/auth";
 import { isAdminUser } from "@/lib/roles";
 import { requireUser } from "@/lib/session";
+
+export const metadata = noIndexSeo("Account", "/account");
 
 export default async function AccountLayout({ children }: { children: React.ReactNode }) {
   const session = await requireUser();

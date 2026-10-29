@@ -1,9 +1,10 @@
 import { Footer } from "@/components/storefront/Footer";
 import { Header } from "@/components/storefront/Header";
+import { noIndexSeo } from "@/lib/seo";
 import { getSession } from "@/lib/session";
 import { CheckoutForm } from "./ui";
 
-export const metadata = { title: "Request Your Order" };
+export const metadata = noIndexSeo("Request Your Order", "/checkout");
 
 export default async function CheckoutPage() {
   const session = await getSession();

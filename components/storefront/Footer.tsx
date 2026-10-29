@@ -21,12 +21,16 @@ export function Footer() {
               <a href="/shop">All Products</a>
               <a href="/bundles">Bundles</a>
               <a href="/product/bpc-157">BPC-157</a>
+              <a href="/product/tb-500">TB-500</a>
+              <a href="/product/nad">NAD+</a>
+              <a href="/product/glutathione">Glutathione</a>
             </div>
             <div>
               <h4>Learn</h4>
               <a href="/dosing">Research Guide</a>
               <a href="/faq">FAQ</a>
               <a href="/about">About</a>
+              <a href="/llms.txt">llms.txt</a>
             </div>
             <div>
               <h4>Support</h4>

@@ -15,6 +15,7 @@ h1{font-size:52px;line-height:1.1;margin:0 0 18px}h2{font-size:34px;color:var(--
 .card{background:#fff;border:1px solid var(--line);border-radius:16px;overflow:hidden;transition:.2s}.card:hover{transform:translateY(-4px);box-shadow:0 12px 30px #00336622}
 .card .b{padding:18px}.tag{font-size:12px;background:var(--sky);color:var(--blue);padding:3px 10px;border-radius:99px;font-weight:600}
 .price{font-weight:700;color:var(--navy);font-size:20px}.img{aspect-ratio:1;display:grid;place-items:center;background:linear-gradient(160deg,var(--sky),#fff)}
+.crumbs{font-size:14px;margin:0 0 16px;color:#6e6e73}.crumbs a{color:var(--blue);font-weight:500}
 .trust{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;text-align:center}.trust div{padding:20px;border-radius:14px;background:#fff;border:1px solid var(--line)}
 .disc{background:#fff8e6;border:1px solid #f1d58a;padding:14px 18px;border-radius:12px;font-size:14px}
 footer{background:var(--ink);color:#cfd6e4;padding:50px 0 20px;font-size:14px}footer .w>div{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:30px}footer h4{color:#fff}footer a{display:block;margin:6px 0}
