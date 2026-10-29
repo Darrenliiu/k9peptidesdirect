@@ -40,6 +40,7 @@ export function Header() {
           <nav>
             <a href="/shop">Shop</a>
             <a href="/bundles">Bundles</a>
+            <a href="/blog">Blog</a>
             <a href="/dosing">Research Guide</a>
             <a href="/about">About</a>
             <a href="/faq">FAQ</a>

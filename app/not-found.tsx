@@ -22,6 +22,9 @@ export default function NotFound() {
             <a className="btn n" href="/bundles">
               Bundles
             </a>{" "}
+            <a className="btn n" href="/blog">
+              Blog
+            </a>{" "}
             <a className="btn n" href="/">
               Home
             </a>

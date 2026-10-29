@@ -66,6 +66,14 @@ export default function FaqPage() {
               research guide
             </a>
             ,{" "}
+            <a href="/blog" style={{ color: "var(--blue)" }}>
+              journal
+            </a>
+            ,{" "}
+            <a href="/blog/how-to-read-a-coa" style={{ color: "var(--blue)" }}>
+              COA explainer
+            </a>
+            ,{" "}
             <a href="/about" style={{ color: "var(--blue)" }}>
               quality standard
             </a>

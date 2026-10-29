@@ -1,3 +1,4 @@
+import { listArticles } from "./blog";
 import { SEED_PRODUCTS } from "./catalog-data";
 import { SITE_EMAIL, SITE_NAME, SITE_URL } from "./seo";
 
@@ -18,6 +19,7 @@ K9 Peptides Direct is a US storefront for lyophilized research peptides and prot
 - [Home](${SITE_URL}/)
 - [Shop](${SITE_URL}/shop)
 - [Bundles](${SITE_URL}/bundles)
+- [Blog](${SITE_URL}/blog)
 - [Research guide](${SITE_URL}/dosing)
 - [About](${SITE_URL}/about)
 - [FAQ](${SITE_URL}/faq)
@@ -32,6 +34,12 @@ ${productLines.join("\n")}
 ## Protocol bundles
 
 ${bundleLines.join("\n")}
+
+## Journal
+
+${listArticles()
+  .map((a) => `- [${a.title}](${SITE_URL}/blog/${a.slug}): ${a.excerpt}`)
+  .join("\n")}
 
 ## Positioning
 
@@ -88,6 +96,10 @@ ${productBlocks.join("\n")}
 - ${SITE_URL}/product/senior-pack
 - ${SITE_URL}/product/performance-pack
 - ${SITE_URL}/product/cognitive-pack
+- ${SITE_URL}/blog
+${listArticles()
+  .map((a) => `- ${SITE_URL}/blog/${a.slug}`)
+  .join("\n")}
 - ${SITE_URL}/dosing
 - ${SITE_URL}/about
 - ${SITE_URL}/faq

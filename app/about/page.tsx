@@ -48,6 +48,10 @@ export default function AboutPage() {
               <a href="/bundles" style={{ color: "var(--blue)" }}>
                 protocol bundles
               </a>
+              . For how to read a lot report, see{" "}
+              <a href="/blog/how-to-read-a-coa" style={{ color: "var(--blue)" }}>
+                the COA journal note
+              </a>
               .
             </p>
           </div>
