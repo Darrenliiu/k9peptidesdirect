@@ -21,6 +21,11 @@ type PageSeoInput = {
   image?: string;
   index?: boolean;
   absoluteTitle?: boolean;
+  type?: "website" | "article";
+  publishedTime?: string;
+  modifiedTime?: string;
+  authors?: string[];
+  tags?: string[];
 };
 
 export function pageSeo({
@@ -30,6 +35,11 @@ export function pageSeo({
   image = DEFAULT_OG,
   index = true,
   absoluteTitle = false,
+  type = "website",
+  publishedTime,
+  modifiedTime,
+  authors,
+  tags,
 }: PageSeoInput): Metadata {
   const url = absUrl(path);
   const ogImage = absUrl(image);
@@ -41,13 +51,21 @@ export function pageSeo({
       ? { index: true, follow: true }
       : { index: false, follow: false, nocache: true, googleBot: { index: false, follow: false } },
     openGraph: {
-      type: "website",
+      type,
       siteName: SITE_NAME,
       locale: "en_US",
       title,
       description,
       url,
-      images: [{ url: ogImage, alt: title }],
+      images: [{ url: ogImage, width: 1200, height: 630, alt: title }],
+      ...(type === "article"
+        ? {
+            publishedTime,
+            modifiedTime: modifiedTime || publishedTime,
+            authors,
+            tags,
+          }
+        : {}),
     },
     twitter: {
       card: "summary_large_image",
@@ -139,6 +157,29 @@ export function productJsonLd(input: {
       availability: input.stock > 0 ? "https://schema.org/InStock" : "https://schema.org/OutOfStock",
       seller: { "@id": `${SITE_URL}/#organization` },
     },
+  };
+}
+
+export function articleJsonLd(input: {
+  title: string;
+  description: string;
+  path: string;
+  image: string;
+  datePublished: string;
+  dateModified?: string;
+  author: string;
+}) {
+  return {
+    "@type": "Article",
+    headline: input.title,
+    description: input.description,
+    image: [absUrl(input.image)],
+    datePublished: input.datePublished,
+    dateModified: input.dateModified || input.datePublished,
+    author: { "@type": "Organization", name: input.author, url: SITE_URL },
+    publisher: { "@id": `${SITE_URL}/#organization` },
+    mainEntityOfPage: { "@type": "WebPage", "@id": absUrl(input.path) },
+    isAccessibleForFree: true,
   };
 }
 

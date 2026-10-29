@@ -48,6 +48,18 @@ export default function DosingPage() {
             <a href="/contact" style={{ color: "var(--blue)" }}>
               contact the team
             </a>
+            . Longer explainers live on the{" "}
+            <a href="/blog" style={{ color: "var(--blue)" }}>
+              journal
+            </a>
+            , including{" "}
+            <a href="/blog/peptide-storage-handling" style={{ color: "var(--blue)" }}>
+              storage and reconstitution
+            </a>{" "}
+            and{" "}
+            <a href="/blog/what-are-peptides" style={{ color: "var(--blue)" }}>
+              what peptides are
+            </a>
             .
           </p>
           <h2>Typical research ranges by weight</h2>
