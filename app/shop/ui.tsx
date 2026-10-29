@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { ProductCard } from "@/components/storefront/ProductCard";
 
 type ShopProduct = {
@@ -23,6 +23,11 @@ export function ShopFilters({
 }) {
   const [cats, setCats] = useState<string[]>([]);
   const [sort, setSort] = useState("best");
+
+  useEffect(() => {
+    const hash = window.location.hash.replace("#", "");
+    if (hash === "bundles" || hash === "packages") setCats(["Bundles"]);
+  }, []);
 
   const shown = useMemo(() => {
     let rows = products.filter((p) => !cats.length || cats.includes(p.category));
@@ -67,7 +72,7 @@ export function ShopFilters({
             <option value="high">Price high-low</option>
           </select>
         </div>
-        <div className="grid" id="packages">
+        <div className="grid" id="bundles">
           {shown.map((p) => (
             <ProductCard key={p.id} product={p} />
           ))}

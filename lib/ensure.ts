@@ -8,48 +8,63 @@ async function migrateAndSeed() {
   if (!hasDatabase()) return false;
   await getPool().query(SCHEMA_SQL);
 
-  const existing = await query<{ count: string }>("select count(*)::text as count from products");
-  if (Number(existing[0]?.count ?? 0) === 0) {
-    for (const p of SEED_PRODUCTS) {
-      await query(
-        `insert into products (
+  for (const p of SEED_PRODUCTS) {
+    await query(
+      `insert into products (
           id, slug, name, sku, category, short_description, description,
           price_cents, sale_price_cents, stock, low_stock_threshold, image,
           status, featured, sort_order, rating, review_count,
           research_overview, dosing, box_contents, coa
         ) values ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,'active',$13,$14,$15,$16,$17,$18,$19,$20)
-        on conflict (id) do nothing`,
-        [
-          p.id,
-          p.slug,
-          p.name,
-          p.sku,
-          p.category,
-          p.shortDescription,
-          p.description,
-          p.priceCents,
-          p.salePriceCents,
-          p.stock,
-          p.lowStockThreshold,
-          p.image,
-          p.featured,
-          p.sortOrder,
-          p.rating,
-          p.reviewCount,
-          p.researchOverview,
-          p.dosing,
-          p.boxContents,
-          p.coa,
-        ],
-      );
-      for (const [i, weight] of WEIGHTS.entries()) {
-        const vid = `${p.id}-${["small", "medium", "large"][i]}`;
-        await query(
-          `insert into product_variants (id, product_id, name, sku, sort_order)
+        on conflict (id) do update set
+          slug = excluded.slug,
+          name = excluded.name,
+          sku = excluded.sku,
+          category = excluded.category,
+          short_description = excluded.short_description,
+          description = excluded.description,
+          price_cents = excluded.price_cents,
+          sale_price_cents = excluded.sale_price_cents,
+          image = excluded.image,
+          featured = excluded.featured,
+          sort_order = excluded.sort_order,
+          rating = excluded.rating,
+          review_count = excluded.review_count,
+          research_overview = excluded.research_overview,
+          dosing = excluded.dosing,
+          box_contents = excluded.box_contents,
+          coa = excluded.coa,
+          updated_at = now()`,
+      [
+        p.id,
+        p.slug,
+        p.name,
+        p.sku,
+        p.category,
+        p.shortDescription,
+        p.description,
+        p.priceCents,
+        p.salePriceCents,
+        p.stock,
+        p.lowStockThreshold,
+        p.image,
+        p.featured,
+        p.sortOrder,
+        p.rating,
+        p.reviewCount,
+        p.researchOverview,
+        p.dosing,
+        p.boxContents,
+        p.coa,
+      ],
+    );
+    for (const [i, weight] of WEIGHTS.entries()) {
+      const vid = `${p.id}-${["small", "medium", "large"][i]}`;
+      await query(
+        `insert into product_variants (id, product_id, name, sku, sort_order)
            values ($1,$2,$3,$4,$5) on conflict (id) do nothing`,
-          [vid, p.id, weight, `${p.sku}-${["S", "M", "L"][i]}`, i],
-        );
-      }
+        [vid, p.id, weight, `${p.sku}-${["S", "M", "L"][i]}`, i],
+      );
     }
   }
 

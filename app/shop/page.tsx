@@ -1,11 +1,16 @@
+import type { Metadata } from "next";
 import { Footer } from "@/components/storefront/Footer";
 import { Header } from "@/components/storefront/Header";
-import { ProductCard } from "@/components/storefront/ProductCard";
 import { listProducts } from "@/lib/catalog";
 import { CATEGORIES } from "@/lib/catalog-data";
 import { ShopFilters } from "./ui";
 
-export const metadata = { title: "Shop" };
+const SITE = process.env.NEXT_PUBLIC_SITE_URL || "https://k9peptidesdirect.com";
+
+export const metadata: Metadata = {
+  title: "Shop",
+  alternates: { canonical: `${SITE}/shop` },
+};
 
 export default async function ShopPage() {
   const products = await listProducts();
@@ -16,7 +21,7 @@ export default async function ShopPage() {
         <div className="w">
           <h1>Shop peptides for dogs</h1>
           <p style={{ fontSize: 18, opacity: 0.9 }}>
-            Lab-verified single peptides and goal-based protocol packs.
+            Lab-verified single peptides and goal-based protocol bundles.
           </p>
         </div>
       </section>

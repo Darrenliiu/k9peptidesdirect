@@ -1,7 +1,7 @@
 import { Footer } from "@/components/storefront/Footer";
 import { Header } from "@/components/storefront/Header";
 import { NewsletterCta } from "@/components/storefront/Newsletter";
-import { Disclaimer, ProductCard } from "@/components/storefront/ProductCard";
+import { ProductCard } from "@/components/storefront/ProductCard";
 import { featuredProducts } from "@/lib/catalog";
 import { ensureReady } from "@/lib/ensure";
 import { hasDatabase } from "@/lib/db";
@@ -93,9 +93,6 @@ export default async function HomePage() {
           <div>
             <b>48</b>Partner vets
           </div>
-          <div>
-            <b>4.9★</b>Owner rating
-          </div>
         </div>
       </section>
       <section className="sec">
@@ -131,27 +128,6 @@ export default async function HomePage() {
         </div>
       </section>
       <section className="sec">
-        <div className="w">
-          <h2>Owners & handlers love the results</h2>
-          <div className="tst">
-            {[
-              ["t1", "Jess M.", "Agility competitor", "Recovery between trials has never been smoother. The dosing card made it easy."],
-              ["t2", "Officer R. Diaz", "K9 handler", "Our patrol dog came back from a soft-tissue injury ahead of schedule, with vet oversight the whole way."],
-              ["t3", "Linda K.", "Senior beagle mom", "At 13, Bella is back to her morning walks. The vet intake gave me real peace of mind."],
-            ].map(([i, n, r, q]) => (
-              <div className="card" key={i}>
-                <img src={`/images/${i}.webp`} alt="" />
-                <b>{n}</b>
-                <br />
-                <small>{r}</small>
-                <p style={{ clear: "both", paddingTop: 10 }}>&quot;{q}&quot;</p>
-                ★★★★★
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-      <section className="sec" style={{ paddingTop: 0 }}>
         <div className="w gal">
           {["run", "goal-performance", "rehab", "goal-joint", "t1", "goal-senior"].map((i) => (
             <img key={i} src={`/images/${i}.webp`} alt="" loading="lazy" />
@@ -181,11 +157,6 @@ export default async function HomePage() {
         </div>
       </section>
       <NewsletterCta />
-      <section className="sec">
-        <div className="w">
-          <Disclaimer />
-        </div>
-      </section>
       <Footer />
     </>
   );

@@ -1,6 +1,5 @@
 import { Footer } from "@/components/storefront/Footer";
 import { Header } from "@/components/storefront/Header";
-import { Disclaimer } from "@/components/storefront/ProductCard";
 
 export const metadata = { title: "Research Guide" };
 
@@ -24,7 +23,6 @@ export default function DosingPage() {
         <div className="w">
           <h2>Canine peptide research guide</h2>
           <p>Educational reference only — your veterinarian sets the final protocol.</p>
-          <Disclaimer />
           <h3>Typical research ranges by weight</h3>
           <div className="tw">
             <table>

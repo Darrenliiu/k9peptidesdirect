@@ -2,6 +2,9 @@ import Script from "next/script";
 import { Logo } from "./Logo";
 import { NewsletterForm, NewsletterPopup, PawPattern } from "./Newsletter";
 
+const DISCLAIMER =
+  "Important: Products are sold for research and veterinary-guided use only. Not intended to diagnose, treat, cure or prevent any disease. Always consult a licensed veterinarian before starting any peptide protocol. Statements have not been evaluated by the FDA.";
+
 export function Footer() {
   return (
     <>
@@ -16,7 +19,7 @@ export function Footer() {
             <div>
               <h4>Shop</h4>
               <a href="/shop">All Products</a>
-              <a href="/shop#packages">Packages</a>
+              <a href="/bundles">Bundles</a>
               <a href="/product/bpc-157">BPC-157</a>
             </div>
             <div>
@@ -42,10 +45,13 @@ export function Footer() {
               <NewsletterForm source="footer" id="nl-foot-email" submitLabel="Join" />
             </div>
           </div>
-          <p style={{ marginTop: 30, fontSize: 12, opacity: 0.7 }}>
-            © 2026 K9PeptidesDirect.com · For research & veterinary-guided use only. Not for human
-            consumption. Not evaluated by the FDA.
-          </p>
+          <div className="foot-legal">
+            <p className="foot-copy">
+              © 2026 K9PeptidesDirect.com · For research & veterinary-guided use only. Not for human
+              consumption. Not evaluated by the FDA.
+            </p>
+            <p className="foot-disc">{DISCLAIMER}</p>
+          </div>
         </div>
       </footer>
       <NewsletterPopup />

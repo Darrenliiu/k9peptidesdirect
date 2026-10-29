@@ -39,7 +39,7 @@ export function Header() {
           <Logo />
           <nav>
             <a href="/shop">Shop</a>
-            <a href="/shop#packages">Packages</a>
+            <a href="/bundles">Bundles</a>
             <a href="/dosing">Research Guide</a>
             <a href="/about">About</a>
             <a href="/faq">FAQ</a>
