@@ -16,6 +16,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { path: "/about", priority: 0.6, changeFrequency: "monthly" },
     { path: "/faq", priority: 0.6, changeFrequency: "monthly" },
     { path: "/contact", priority: 0.5, changeFrequency: "monthly" },
+    { path: "/shipping", priority: 0.4, changeFrequency: "monthly" },
+    { path: "/returns", priority: 0.4, changeFrequency: "monthly" },
+    { path: "/privacy", priority: 0.3, changeFrequency: "yearly" },
+    { path: "/terms", priority: 0.3, changeFrequency: "yearly" },
   ];
   const published = await listPublishedCoas();
   return [

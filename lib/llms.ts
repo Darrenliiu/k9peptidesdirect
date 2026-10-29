@@ -26,6 +26,10 @@ K9 Peptides Direct is a US storefront for lyophilized research peptides and prot
 - [About](${SITE_URL}/about)
 - [FAQ](${SITE_URL}/faq)
 - [Contact](${SITE_URL}/contact)
+- [Shipping](${SITE_URL}/shipping)
+- [Returns](${SITE_URL}/returns)
+- [Privacy](${SITE_URL}/privacy)
+- [Terms](${SITE_URL}/terms)
 - [Full llms.txt](${SITE_URL}/llms-full.txt)
 - [Sitemap](${SITE_URL}/sitemap.xml)
 
@@ -118,5 +122,9 @@ ${listArticles()
 - ${SITE_URL}/about
 - ${SITE_URL}/faq
 - ${SITE_URL}/contact
+- ${SITE_URL}/shipping
+- ${SITE_URL}/returns
+- ${SITE_URL}/privacy
+- ${SITE_URL}/terms
 `;
 }
