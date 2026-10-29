@@ -36,7 +36,7 @@ const QA = [
   },
   {
     q: "Can I see test results?",
-    a: "Yes. Every published batch certificate of analysis is listed on the product page. A full COA library is in progress.",
+    a: "Published batch certificates appear on the product page and in the COA library. Until a lot file is posted, the library shows a coming-soon state — no certificate should be inferred from catalog copy.",
   },
   {
     q: "What's your return policy?",
@@ -68,6 +68,10 @@ export default function FaqPage() {
             ,{" "}
             <a href="/blog" style={{ color: "var(--blue)" }}>
               journal
+            </a>
+            ,{" "}
+            <a href="/coa" style={{ color: "var(--blue)" }}>
+              COA library
             </a>
             ,{" "}
             <a href="/blog/how-to-read-a-coa" style={{ color: "var(--blue)" }}>

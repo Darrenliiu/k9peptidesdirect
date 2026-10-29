@@ -3,6 +3,9 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   poweredByHeader: false,
   trailingSlash: false,
+  experimental: {
+    serverActions: { bodySizeLimit: "12mb" },
+  },
   async redirects() {
     return [
       { source: "/index.html", destination: "/", permanent: true },

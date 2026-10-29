@@ -175,6 +175,22 @@ CREATE TABLE IF NOT EXISTS order_notes (
   is_customer_visible BOOLEAN NOT NULL DEFAULT false,
   created_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
+CREATE TABLE IF NOT EXISTS coas (
+  id TEXT PRIMARY KEY,
+  product_id TEXT NOT NULL REFERENCES products(id) ON DELETE CASCADE,
+  lot TEXT NOT NULL,
+  test_date TEXT,
+  lab_name TEXT,
+  purity_percent TEXT,
+  file_url TEXT NOT NULL,
+  file_path TEXT NOT NULL,
+  file_name TEXT NOT NULL DEFAULT '',
+  content_type TEXT NOT NULL DEFAULT 'application/pdf',
+  published BOOLEAN NOT NULL DEFAULT false,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+CREATE INDEX IF NOT EXISTS coas_product_idx ON coas (product_id, published, created_at DESC);
+CREATE INDEX IF NOT EXISTS coas_lot_idx ON coas (lot);
 CREATE SEQUENCE IF NOT EXISTS order_number_seq START 1001;
 CREATE INDEX IF NOT EXISTS orders_email_idx ON orders (email);
 CREATE INDEX IF NOT EXISTS orders_status_idx ON orders (status);

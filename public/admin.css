@@ -63,7 +63,9 @@ table.plain th { color: var(--muted); font-weight: 600; font-size: 12px; text-tr
   padding: 0 18px; min-height: 40px; font-weight: 600; cursor: pointer;
 }
 .btn.ghost { background: #fff; color: var(--ink); border: 1px solid var(--line); }
-.btn.danger { background: var(--danger); }
+.btn.danger { background: var(--danger); color: #fff; }
+.admin label { display: block; font-size: 13px; font-weight: 600; color: var(--muted); }
+.admin label input, .admin label select { display: block; width: 100%; margin-top: 6px; }
 .pill { display: inline-flex; padding: 2px 8px; border-radius: 99px; background: #e8f2fe; color: #0071e3; font-size: 12px; font-weight: 600; }
 .pill.requested { background: #fff3cd; color: #7a5b00; }
 .pill.contacted { background: #e8f2fe; color: #0071e3; }

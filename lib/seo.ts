@@ -140,6 +140,7 @@ export function productJsonLd(input: {
   slug: string;
   priceCents: number;
   stock: number;
+  coas?: Array<{ lot: string; purityPercent?: string | null; url: string }>;
 }) {
   return {
     "@type": "Product",
@@ -157,6 +158,16 @@ export function productJsonLd(input: {
       availability: input.stock > 0 ? "https://schema.org/InStock" : "https://schema.org/OutOfStock",
       seller: { "@id": `${SITE_URL}/#organization` },
     },
+    ...(input.coas?.length
+      ? {
+          additionalProperty: input.coas.map((c) => ({
+            "@type": "PropertyValue",
+            name: "Certificate of Analysis",
+            value: c.purityPercent ? `Lot ${c.lot}, ${c.purityPercent}%` : `Lot ${c.lot}`,
+            url: c.url.startsWith("http") ? c.url : absUrl(c.url),
+          })),
+        }
+      : {}),
   };
 }
 
