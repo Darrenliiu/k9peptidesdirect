@@ -6,6 +6,9 @@ import { coas, products, type Coa, type Product } from "./schema";
 
 export type CoaWithProduct = Coa & { product: Product };
 
+export const ACS_SUPPLIER_NOTE =
+  "Certificates of analysis are provided by our supplier's independent third-party lab (ACS Laboratory). K9 Peptides Direct-issued copies are coming soon.";
+
 export function publicCoaPath(id: string, opts?: { download?: boolean }) {
   return opts?.download ? `/coa/files/${id}?download=1` : `/coa/files/${id}`;
 }

@@ -8,7 +8,7 @@ import { JsonLd } from "@/components/storefront/JsonLd";
 import { ProductCard } from "@/components/storefront/ProductCard";
 import { BUNDLE_INCLUDES } from "@/lib/catalog-data";
 import { getProductBySlug, listProducts, unitPrice } from "@/lib/catalog";
-import { listPublishedCoasForProduct, publicCoaPath } from "@/lib/coas";
+import { ACS_SUPPLIER_NOTE, listPublishedCoasForProduct, publicCoaPath } from "@/lib/coas";
 import { formatMoney } from "@/lib/money";
 import { breadcrumbJsonLd, graphJsonLd, pageSeo, productJsonLd } from "@/lib/seo";
 
@@ -181,6 +181,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
                   . Until then, no certificate should be inferred from this page.
                 </p>
               )}
+              <p className="coa-source-note">{ACS_SUPPLIER_NOTE}</p>
             </details>
           </div>
         </div>
