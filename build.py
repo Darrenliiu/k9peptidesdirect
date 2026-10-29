@@ -53,10 +53,65 @@ def nl_form(source,fid,label="Subscribe"):
     f'<p class="nl-status" role="status" aria-live="polite"></p>'
     f'</form>'
   )
+NL_PAW_D='<circle cx="5" cy="9" r="2.4"/><circle cx="9.5" cy="4.5" r="2.4"/><circle cx="14.5" cy="4.5" r="2.4"/><circle cx="19" cy="9" r="2.4"/><path d="M12 10c3 0 7 5 6 8s-4 2-6 2-5 1-6-2 3-8 6-8z"/>'
+NL_HEX='M12 2.1 21.2 7.4v9.2L12 21.9 2.8 16.6V7.4Z'
+NL_BG_CTA=(
+  '<div class="nl-bg" aria-hidden="true">'
+  '<svg class="nl-bg-art" viewBox="0 0 1440 420" preserveAspectRatio="xMaxYMid slice" focusable="false">'
+  f'<defs><symbol id="nl-paw" viewBox="0 0 24 24">{NL_PAW_D}</symbol>'
+  f'<symbol id="nl-hex" viewBox="0 0 24 24"><path d="{NL_HEX}"/></symbol></defs>'
+  '<g fill="none" stroke="#9cc8ff" stroke-width="1.1">'
+  '<g opacity=".22">'
+  '<use href="#nl-hex" x="980" y="46" width="56" height="56"/>'
+  '<use href="#nl-hex" x="1026" y="72" width="56" height="56"/>'
+  '<use href="#nl-hex" x="1072" y="46" width="56" height="56"/>'
+  '<use href="#nl-hex" x="1118" y="72" width="56" height="56"/>'
+  '<use href="#nl-hex" x="1164" y="46" width="56" height="56"/>'
+  '<use href="#nl-hex" x="1026" y="124" width="56" height="56"/>'
+  '<use href="#nl-hex" x="1072" y="150" width="56" height="56"/>'
+  '<use href="#nl-hex" x="1118" y="124" width="56" height="56"/>'
+  '<use href="#nl-hex" x="1164" y="150" width="56" height="56"/>'
+  '<use href="#nl-hex" x="1210" y="72" width="56" height="56"/>'
+  '<use href="#nl-hex" x="1210" y="124" width="56" height="56"/>'
+  '</g>'
+  '<g opacity=".14">'
+  '<use href="#nl-hex" x="980" y="150" width="56" height="56"/>'
+  '<use href="#nl-hex" x="1072" y="98" width="56" height="56"/>'
+  '<use href="#nl-hex" x="1256" y="98" width="56" height="56"/>'
+  '<use href="#nl-hex" x="1164" y="202" width="56" height="56"/>'
+  '</g>'
+  '</g>'
+  '<g fill="#9cc8ff" opacity=".28">'
+  '<circle cx="1008" cy="74" r="2.4"/><circle cx="1054" cy="100" r="2.4"/><circle cx="1100" cy="74" r="2.4"/>'
+  '<circle cx="1146" cy="100" r="2.4"/><circle cx="1192" cy="74" r="2.4"/><circle cx="1100" cy="178" r="2.4"/>'
+  '</g>'
+  '<use href="#nl-paw" x="1188" y="188" width="120" height="120" fill="#fff" opacity=".09" transform="rotate(-16 1248 248)"/>'
+  '<use href="#nl-paw" x="860" y="250" width="72" height="72" fill="#fff" opacity=".07" transform="rotate(22 896 286)"/>'
+  '<use href="#nl-paw" x="1288" y="18" width="54" height="54" fill="#fff" opacity=".08" transform="rotate(8 1315 45)"/>'
+  '</svg></div>'
+)
+NL_BG_POP=(
+  '<div class="nl-bg" aria-hidden="true">'
+  '<svg class="nl-bg-art" viewBox="0 0 440 220" preserveAspectRatio="xMaxYMin slice" focusable="false">'
+  f'<defs><symbol id="nl-pop-paw" viewBox="0 0 24 24">{NL_PAW_D}</symbol>'
+  f'<symbol id="nl-pop-hex" viewBox="0 0 24 24"><path d="{NL_HEX}"/></symbol></defs>'
+  '<g fill="none" stroke="#087cf0" stroke-width="1">'
+  '<g opacity=".16">'
+  '<use href="#nl-pop-hex" x="292" y="8" width="44" height="44"/>'
+  '<use href="#nl-pop-hex" x="328" y="28" width="44" height="44"/>'
+  '<use href="#nl-pop-hex" x="364" y="8" width="44" height="44"/>'
+  '<use href="#nl-pop-hex" x="328" y="68" width="44" height="44"/>'
+  '<use href="#nl-pop-hex" x="364" y="48" width="44" height="44"/>'
+  '</g></g>'
+  '<g fill="#087cf0" opacity=".22"><circle cx="314" cy="30" r="2"/><circle cx="350" cy="50" r="2"/><circle cx="386" cy="30" r="2"/></g>'
+  '<use href="#nl-pop-paw" x="352" y="118" width="78" height="78" fill="#003366" opacity=".06" transform="rotate(-14 391 157)"/>'
+  '</svg></div>'
+)
 NL_POPUP=(
   '<div class="nl-pop" hidden>'
   '<div class="nl-pop-back" data-nl-close tabindex="-1"></div>'
   '<div class="nl-pop-card" role="dialog" aria-modal="true" aria-labelledby="nl-pop-h">'
+  +NL_BG_POP+
   '<button class="nl-x" type="button" aria-label="Close" data-nl-close>&times;</button>'
   '<span class="tag">Newsletter</span>'
   '<h2 id="nl-pop-h">A quieter way to keep up</h2>'
@@ -86,15 +141,20 @@ CSS_NL="""
 .nl-status.ok{color:#1f7a46}
 .nl-status.err{color:#b42318}
 .nl-form.is-busy .btn{opacity:.7;pointer-events:none}
-.nl-cta{background:linear-gradient(135deg,var(--navy),#0a4f96);color:#fff}
+.nl-cta{position:relative;overflow:hidden;isolation:isolate;color:#fff;background:radial-gradient(ellipse 62% 120% at 92% 8%,#1a74db 0%,transparent 58%),radial-gradient(ellipse 46% 80% at 4% 108%,#001428 0%,transparent 52%),linear-gradient(135deg,var(--navy),#0a4f96)}
+.nl-cta:after{content:'';position:absolute;inset:0;z-index:0;pointer-events:none;opacity:.07;background-image:radial-gradient(#fff 0.6px,transparent .7px);background-size:3px 3px}
+.nl-cta .nl-bg{position:absolute;inset:0;z-index:0;pointer-events:none}
+.nl-cta .nl-bg-art{width:100%;height:100%;display:block}
 .nl-cta h2{color:#fff}
 .nl-cta p{opacity:.92;margin:0}
-.nl-cta-box{display:grid;grid-template-columns:1.15fr .85fr;gap:36px;align-items:center}
+.nl-cta-box{position:relative;z-index:1;display:grid;grid-template-columns:1.15fr .85fr;gap:36px;align-items:center}
 .nl-cta .nl-row input{background:#fff;border-color:transparent}
 .nl-cta .nl-status.ok{color:#c8f0d4}
 .nl-cta .nl-status.err{color:#ffd2cc}
 .nl-cta .tag{background:#ffffff22;color:#fff}
 footer .w>div{grid-template-columns:1.5fr 1fr 1fr 1fr 1.5fr}
+footer .nl-foot{position:relative}
+footer .nl-foot:before{content:'';position:absolute;right:0;top:-8px;width:64px;height:64px;opacity:.1;pointer-events:none;background:center/contain no-repeat url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23087cf0'%3E%3Ccircle cx='5' cy='9' r='2.4'/%3E%3Ccircle cx='9.5' cy='4.5' r='2.4'/%3E%3Ccircle cx='14.5' cy='4.5' r='2.4'/%3E%3Ccircle cx='19' cy='9' r='2.4'/%3E%3Cpath d='M12 10c3 0 7 5 6 8s-4 2-6 2-5 1-6-2 3-8 6-8z'/%3E%3C/svg%3E")}
 footer .nl-blurb{margin:0 0 12px;opacity:.85}
 footer .nl-form input{margin:0;background:#1a2038;border-color:#3d4566;color:#fff}
 footer .nl-form input::placeholder{color:#8b93a7}
@@ -103,14 +163,18 @@ footer .nl-status.err{color:#ffb4ac}
 .nl-pop[hidden]{display:none!important}
 .nl-pop{position:fixed;inset:0;z-index:40;display:flex;align-items:center;justify-content:center;padding:20px}
 .nl-pop-back{position:absolute;inset:0;background:#292e4d73;-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px)}
-.nl-pop-card{position:relative;background:#fff;border-radius:18px;padding:32px 28px 28px;max-width:440px;width:100%;box-shadow:0 24px 60px #00336633;border:1px solid var(--line)}
-.nl-pop-card h2{font-size:28px;margin:10px 0 8px}
+.nl-pop-card{position:relative;overflow:hidden;isolation:isolate;background:linear-gradient(180deg,#e8f2fe 0%,#fff 46%);border-radius:18px;padding:32px 28px 28px;max-width:440px;width:100%;box-shadow:0 24px 60px #00336633;border:1px solid var(--line)}
+.nl-pop-card:before{content:'';position:absolute;left:0;right:0;top:0;height:3px;background:linear-gradient(90deg,var(--blue),var(--navy));z-index:2}
+.nl-pop-card .nl-bg{position:absolute;inset:0 auto auto 0;width:100%;height:220px;z-index:0;pointer-events:none}
+.nl-pop-card .nl-bg-art{width:100%;height:100%;display:block}
+.nl-pop-card>*:not(.nl-bg){position:relative;z-index:1}
+.nl-pop-card h2{font-size:28px;margin:10px 0 8px;color:var(--navy)}
 .nl-pop-card>p{margin:0 0 18px;color:#4a5168}
-.nl-x{position:absolute;top:12px;right:12px;width:40px;height:40px;border:0;background:var(--bg);border-radius:10px;font-size:24px;line-height:1;color:var(--navy);cursor:pointer}
+.nl-x{position:absolute;top:12px;right:12px;width:40px;height:40px;border:0;background:#fff;border-radius:10px;font-size:24px;line-height:1;color:var(--navy);cursor:pointer;z-index:2;box-shadow:0 1px 0 #00336614}
 .nl-x:hover,.nl-x:focus-visible{background:var(--sky);outline:2px solid var(--blue);outline-offset:2px}
 @media(max-width:960px){footer .w>div{grid-template-columns:1fr 1fr}footer .nl-foot{grid-column:1/-1}}
-@media(max-width:820px){.nl-cta-box{grid-template-columns:1fr;gap:22px}footer .w>div{grid-template-columns:1fr 1fr}footer .nl-foot{grid-column:1/-1}}
-@media(max-width:640px){.nl-row{flex-direction:column}.nl-row .btn{width:100%}.nl-pop-card{padding:26px 20px 22px}.nl-pop-card h2{font-size:24px}}
+@media(max-width:820px){.nl-cta-box{grid-template-columns:1fr;gap:22px}.nl-cta .nl-bg{opacity:.55}footer .w>div{grid-template-columns:1fr 1fr}footer .nl-foot{grid-column:1/-1}}
+@media(max-width:640px){.nl-row{flex-direction:column}.nl-row .btn{width:100%}.nl-pop-card{padding:26px 20px 22px}.nl-pop-card h2{font-size:24px}.nl-pop-card .nl-bg{height:180px}}
 @media(prefers-reduced-motion:reduce){.nl-pop-card{animation:none}}
 """
 open("favicon.svg","w").write(PAW.replace('width="30" height="30" ','xmlns="http://www.w3.org/2000/svg" '))
@@ -135,7 +199,7 @@ page("index.html","Home",f'''<section class=fb style="background-image:url(image
 <section class="sec alt"><div class="w split"><div><span class=tag>Vet-guided</span><h2>Screened by veterinarians, not algorithms</h2><p>Our intake connects you with licensed vets who review your dog's history before any protocol is fulfilled.</p><a class=btn href=contact.html>Start intake</a></div><img src="images/vet.webp" alt="Veterinarian with dog" loading=lazy></div></section>
 <section class=sec><div class=w><h2>Owners & handlers love the results</h2><div class=tst>{"".join(f'<div class=card><img src="images/{i}.webp" alt=""><b>{n}</b><br><small>{r}</small><p style="clear:both;padding-top:10px">"{q}"</p>★★★★★</div>' for i,n,r,q in [("t1","Jess M.","Agility competitor","Recovery between trials has never been smoother. The dosing card made it easy."),("t2","Officer R. Diaz","K9 handler","Our patrol dog came back from a soft-tissue injury ahead of schedule, with vet oversight the whole way."),("t3","Linda K.","Senior beagle mom","At 13, Bella is back to her morning walks. The vet intake gave me real peace of mind.")])}</div></div></section>
 <section class=sec style="padding-top:0"><div class="w gal">{"".join(f'<img src="images/{i}.webp" alt="" loading=lazy>' for i in ["run","goal-performance","rehab","goal-joint","t1","goal-senior"])}</div></section><section class="sec alt"><div class=w><h2>How it works</h2><div class=grid><div class=card><div class=b><h3>1 · Take the finder quiz</h3>Tell us breed, weight, age and goals.</div></div><div class=card><div class=b><h3>2 · Vet screening</h3>Quick health intake reviewed before shipping.</div></div><div class=card><div class=b><h3>3 · Pre-dosed protocol</h3>Weight-based dosing chart in every box.</div></div></div></div></section>
-<section class="sec nl-cta" aria-labelledby="nl-cta-h"><div class="w nl-cta-box"><div><span class="tag">Newsletter</span><h2 id="nl-cta-h">Stay close to restocks and research notes</h2><p>The occasional email when we add a product, restock a favorite, or publish a protocol guide. No daily noise.</p></div>{nl_form("cta","nl-cta-email")}</div></section>
+<section class="sec nl-cta" aria-labelledby="nl-cta-h">{NL_BG_CTA}<div class="w nl-cta-box"><div><span class="tag">Newsletter</span><h2 id="nl-cta-h">Stay close to restocks and research notes</h2><p>The occasional email when we add a product, restock a favorite, or publish a protocol guide. No daily noise.</p></div>{nl_form("cta","nl-cta-email")}</div></section>
 <section class=sec><div class=w>{DISC}</div></section>''')
 page("shop.html","Shop",f'''<section class=ban style="background-image:url(images/run.webp)"><div class=w><h1>Shop peptides for dogs</h1><p style="font-size:18px;opacity:.9">Lab-verified single peptides and goal-based protocol packs.</p></div></section><section class=sec><div class=w><h2>Shop all peptides</h2><div class=shop><details class=f open><summary class=fsum>Filters</summary><h4>Category</h4>{"".join(f'<label><input type=checkbox style="width:auto"> {c}</label>' for c in ["Recovery","Longevity","Wellness","Weight","Packages"])}<h4>Dog size</h4>{"".join(f'<label><input type=checkbox style="width:auto"> {c}</label>' for c in ["Small (<25 lb)","Medium (25-60 lb)","Large (60+ lb)"])}<h4>Price</h4><input type=range></details>
 <div><div style="display:flex;justify-content:space-between;align-items:center"><span>{len(P)} products</span><select style="width:200px"><option>Sort: Best selling</option><option>Price low-high</option></select></div><div class=grid id=packages>{"".join(card(p) for p in P)}</div></div></div></div></section>''')
