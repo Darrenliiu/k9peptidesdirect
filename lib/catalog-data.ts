@@ -33,6 +33,8 @@ export const BUNDLE_INCLUDES: Record<string, string[]> = {
 
 export const WEIGHTS = ["Small (<25 lb)", "Medium (25–60 lb)", "Large (60+ lb)"] as const;
 
+/** Placeholder prices for Darren to confirm. Singles $80. Bundles: Joint $159, Gut $149, Starter $139, Senior $179, Performance $209, Cognitive $129. */
+
 export const SEED_PRODUCTS: SeedProduct[] = [
   {
     id: "bpc-157",
@@ -185,7 +187,7 @@ export const SEED_PRODUCTS: SeedProduct[] = [
     salePriceCents: null,
     stock: 24,
     lowStockThreshold: 6,
-    image: "/images/joint-pack.webp",
+    image: "/images/joint-pack.svg",
     featured: false,
     sortOrder: 7,
     rating: "0",
@@ -254,7 +256,7 @@ export const SEED_PRODUCTS: SeedProduct[] = [
     salePriceCents: null,
     stock: 20,
     lowStockThreshold: 6,
-    image: "/images/senior-pack.webp",
+    image: "/images/senior-pack.svg",
     featured: false,
     sortOrder: 10,
     rating: "0",
@@ -277,7 +279,7 @@ export const SEED_PRODUCTS: SeedProduct[] = [
     salePriceCents: null,
     stock: 18,
     lowStockThreshold: 6,
-    image: "/images/performance-pack.webp",
+    image: "/images/performance-pack.svg",
     featured: false,
     sortOrder: 11,
     rating: "0",
@@ -300,7 +302,7 @@ export const SEED_PRODUCTS: SeedProduct[] = [
     salePriceCents: null,
     stock: 22,
     lowStockThreshold: 6,
-    image: "/images/cognitive-pack.webp",
+    image: "/images/cognitive-pack.svg",
     featured: false,
     sortOrder: 12,
     rating: "0",
