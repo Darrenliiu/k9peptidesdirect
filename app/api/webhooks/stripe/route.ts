@@ -7,7 +7,7 @@ export async function POST(request: Request) {
   try {
     const provider = await getPaymentProvider();
     if (!provider.parseWebhook) {
-      return Response.json({ error: "Webhooks are not enabled for the stub provider" }, { status: 400 });
+      return Response.json({ error: "Webhooks are not enabled for the request provider" }, { status: 400 });
     }
     const event = await provider.parseWebhook(raw, signature);
     if (event.status === "paid") {

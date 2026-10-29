@@ -147,6 +147,9 @@ CREATE TABLE IF NOT EXISTS orders (
   shipping_address JSONB NOT NULL,
   billing_address JSONB,
   customer_note TEXT,
+  dog_name TEXT,
+  dog_weight TEXT,
+  contact_method TEXT,
   vet_confirmed BOOLEAN NOT NULL DEFAULT false,
   created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
   updated_at TIMESTAMPTZ NOT NULL DEFAULT now()

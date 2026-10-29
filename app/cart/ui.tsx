@@ -116,7 +116,7 @@ export function CartClient() {
             <span className="price">Total {formatMoney(subtotal + (lines.length ? shipping : 0))}</span>
           </p>
           <a className="btn" href="/checkout" style={{ width: "100%", textAlign: "center" }}>
-            Continue to vet intake & checkout
+            Continue to request order
           </a>
         </div>
       </div>

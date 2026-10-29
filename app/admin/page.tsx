@@ -1,7 +1,7 @@
 import { eq } from "drizzle-orm";
 import { getDb } from "@/lib/db";
 import { formatMoney } from "@/lib/money";
-import { dashboardStats, listOrders } from "@/lib/orders";
+import { dashboardStats, listOrders, statusLabel } from "@/lib/orders";
 import { products } from "@/lib/schema";
 
 export default async function AdminHome() {
@@ -30,6 +30,10 @@ export default async function AdminHome() {
           <span>Orders · 30 days</span>
         </div>
         <div className="kpi">
+          <b>{stats.requested}</b>
+          <span>Requested</span>
+        </div>
+        <div className="kpi">
           <b>{stats.open_orders}</b>
           <span>Open orders</span>
         </div>
@@ -56,7 +60,7 @@ export default async function AdminHome() {
                   </td>
                   <td>{o.email}</td>
                   <td>
-                    <span className="pill">{o.status}</span>
+                    <span className={`pill ${o.status}`}>{statusLabel(o.status)}</span>
                   </td>
                   <td>{formatMoney(o.totalCents)}</td>
                 </tr>

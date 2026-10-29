@@ -1,7 +1,7 @@
 "use server";
 
 import { z } from "zod";
-import { createOrder, type CartLine } from "@/lib/checkout";
+import { CONTACT_METHODS, createOrder, type CartLine } from "@/lib/checkout";
 import { getSession } from "@/lib/session";
 import { quoteShipping } from "@/lib/shipping";
 
@@ -14,7 +14,7 @@ const address = z.object({
   state: z.string().min(1),
   postalCode: z.string().min(3),
   country: z.string().min(2),
-  phone: z.string().optional(),
+  phone: z.string().min(7),
 });
 
 const schema = z.object({
@@ -31,6 +31,9 @@ const schema = z.object({
   billing: address.optional(),
   shippingMethodId: z.string().optional(),
   customerNote: z.string().optional(),
+  dogName: z.string().optional(),
+  dogWeight: z.string().optional(),
+  contactMethod: z.enum(CONTACT_METHODS),
   vetConfirmed: z.boolean(),
 });
 

@@ -30,15 +30,20 @@ export async function updateOrderAction(formData: FormData) {
     throw new Error("Invalid status");
   }
   const db = getDb();
-  await db
-    .update(orders)
-    .set({
-      status,
-      trackingNumber: String(formData.get("trackingNumber") || "") || null,
-      trackingCarrier: String(formData.get("trackingCarrier") || "") || null,
-      updatedAt: new Date(),
-    })
-    .where(eq(orders.id, id));
+  const next: {
+    status: string;
+    trackingNumber: string | null;
+    trackingCarrier: string | null;
+    updatedAt: Date;
+    paymentStatus?: string;
+  } = {
+    status,
+    trackingNumber: String(formData.get("trackingNumber") || "") || null,
+    trackingCarrier: String(formData.get("trackingCarrier") || "") || null,
+    updatedAt: new Date(),
+  };
+  if (status === "confirmed") next.paymentStatus = "paid";
+  await db.update(orders).set(next).where(eq(orders.id, id));
   const note = String(formData.get("note") || "").trim();
   if (note) {
     await db.insert(orderNotes).values({
