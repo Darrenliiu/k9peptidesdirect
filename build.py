@@ -54,11 +54,12 @@ def nl_form(source,fid,label="Subscribe"):
     f'</form>'
   )
 NL_PAW_D='<circle cx="5" cy="9" r="2.4"/><circle cx="9.5" cy="4.5" r="2.4"/><circle cx="14.5" cy="4.5" r="2.4"/><circle cx="19" cy="9" r="2.4"/><path d="M12 10c3 0 7 5 6 8s-4 2-6 2-5 1-6-2 3-8 6-8z"/>'
+def _nl_paw(x,y,deg):
+  return f'<g transform="translate({x},{y}) rotate({deg} 12 12)">{NL_PAW_D}</g>'
 NL_PAW_PATTERN=(
   '<svg class="nl-defs" aria-hidden="true" width="0" height="0" focusable="false">'
-  '<defs><pattern id="nl-paws" width="120" height="104" patternUnits="userSpaceOnUse" patternTransform="rotate(-10)">'
-  f'<g fill="currentColor"><g transform="translate(16,12) rotate(-12 12 12)">{NL_PAW_D}</g>'
-  f'<g transform="translate(76,60) rotate(11 12 12)">{NL_PAW_D}</g></g>'
+  '<defs><pattern id="nl-paws" width="92" height="80" patternUnits="userSpaceOnUse" patternTransform="rotate(-12)">'
+  f'<g fill="currentColor">{_nl_paw(8,8,-14)}{_nl_paw(54,12,10)}{_nl_paw(31,48,-8)}</g>'
   '</pattern></defs></svg>'
 )
 NL_BG='<div class="nl-bg" aria-hidden="true"><svg class="nl-bg-art" focusable="false"><rect width="100%" height="100%" fill="url(#nl-paws)"/></svg></div>'
@@ -100,8 +101,8 @@ CSS_NL="""
 .nl-bg{position:absolute;inset:0;z-index:0;pointer-events:none;overflow:hidden}
 .nl-bg-art{display:block;width:100%;height:100%}
 .nl-cta{position:relative;overflow:hidden;isolation:isolate;color:#fff;background:radial-gradient(ellipse 62% 120% at 92% 8%,#1a74db 0%,transparent 58%),radial-gradient(ellipse 46% 80% at 4% 108%,#001428 0%,transparent 52%),linear-gradient(135deg,var(--navy),#0a4f96)}
-.nl-cta .nl-bg{opacity:.2;color:#fff;-webkit-mask-image:linear-gradient(90deg,transparent 4%,#0006 34%,#000 72%);mask-image:linear-gradient(90deg,transparent 4%,#0006 34%,#000 72%)}
-.nl-cta .nl-bg-art{width:118%;height:118%;transform-origin:right center}
+.nl-cta .nl-bg{opacity:.26;color:#fff;-webkit-mask-image:linear-gradient(90deg,transparent 0%,#0005 26%,#000 68%);mask-image:linear-gradient(90deg,transparent 0%,#0005 26%,#000 68%)}
+.nl-cta .nl-bg-art{width:112%;height:112%;transform-origin:right center}
 .nl-cta h2{color:#fff}
 .nl-cta p{opacity:.92;margin:0}
 .nl-cta-box{position:relative;z-index:1;display:grid;grid-template-columns:1.15fr .85fr;gap:36px;align-items:center}
@@ -111,7 +112,7 @@ CSS_NL="""
 .nl-cta .tag{background:#ffffff22;color:#fff}
 footer .w>div{grid-template-columns:1.5fr 1fr 1fr 1fr 1.5fr}
 footer .nl-foot{position:relative;overflow:hidden}
-footer .nl-foot .nl-bg{opacity:.1;color:#9cc8ff;-webkit-mask-image:linear-gradient(180deg,transparent 0%,#000 38%,#0009 100%);mask-image:linear-gradient(180deg,transparent 0%,#000 38%,#0009 100%)}
+footer .nl-foot .nl-bg{opacity:.2;color:#9cc8ff;-webkit-mask-image:linear-gradient(180deg,#0005 0%,#000 40%,#000b 100%);mask-image:linear-gradient(180deg,#0005 0%,#000 40%,#000b 100%)}
 footer .nl-foot h4,footer .nl-foot .nl-blurb,footer .nl-foot .nl-form{position:relative;z-index:1}
 footer .nl-blurb{margin:0 0 12px;opacity:.85}
 footer .nl-form input{margin:0;background:#1a2038;border-color:#3d4566;color:#fff}
@@ -123,14 +124,14 @@ footer .nl-status.err{color:#ffb4ac}
 .nl-pop-back{position:absolute;inset:0;background:#292e4d73;-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px)}
 .nl-pop-card{position:relative;overflow:hidden;isolation:isolate;background:linear-gradient(180deg,#e8f2fe 0%,#fff 46%);border-radius:18px;padding:32px 28px 28px;max-width:440px;width:100%;box-shadow:0 24px 60px #00336633;border:1px solid var(--line)}
 .nl-pop-card:before{content:'';position:absolute;left:0;right:0;top:0;height:3px;background:linear-gradient(90deg,var(--blue),var(--navy));z-index:2}
-.nl-pop-card .nl-bg{opacity:.07;color:var(--navy);-webkit-mask-image:linear-gradient(180deg,#000c 0%,#0006 48%,transparent 84%);mask-image:linear-gradient(180deg,#000c 0%,#0006 48%,transparent 84%)}
+.nl-pop-card .nl-bg{opacity:.09;color:var(--navy);-webkit-mask-image:linear-gradient(180deg,#000b 0%,#0006 52%,transparent 88%);mask-image:linear-gradient(180deg,#000b 0%,#0006 52%,transparent 88%)}
 .nl-pop-card>:not(.nl-bg):not(.nl-x){position:relative;z-index:1}
 .nl-pop-card h2{font-size:28px;margin:10px 0 8px;color:var(--navy)}
 .nl-pop-card>p{margin:0 0 18px;color:#4a5168}
 .nl-pop-card .nl-x{position:absolute;top:12px;right:12px;width:40px;height:40px;border:0;background:#fff;border-radius:10px;font-size:24px;line-height:1;color:var(--navy);cursor:pointer;z-index:2;box-shadow:0 1px 0 #00336614}
 .nl-x:hover,.nl-x:focus-visible{background:var(--sky);outline:2px solid var(--blue);outline-offset:2px}
 @media(max-width:960px){footer .w>div{grid-template-columns:1fr 1fr}footer .nl-foot{grid-column:1/-1}}
-@media(max-width:820px){.nl-cta-box{grid-template-columns:1fr;gap:22px}.nl-cta .nl-bg{opacity:.14;-webkit-mask-image:linear-gradient(180deg,transparent 0%,#0007 38%,#000 100%);mask-image:linear-gradient(180deg,transparent 0%,#0007 38%,#000 100%)}.nl-cta .nl-bg-art{width:100%;height:130%;transform:none}footer .w>div{grid-template-columns:1fr 1fr}footer .nl-foot{grid-column:1/-1}}
+@media(max-width:820px){.nl-cta-box{grid-template-columns:1fr;gap:22px}.nl-cta .nl-bg{opacity:.18;-webkit-mask-image:linear-gradient(180deg,transparent 0%,#0006 28%,#000 100%);mask-image:linear-gradient(180deg,transparent 0%,#0006 28%,#000 100%)}.nl-cta .nl-bg-art{width:100%;height:120%;transform:none}footer .w>div{grid-template-columns:1fr 1fr}footer .nl-foot{grid-column:1/-1}}
 @media(max-width:640px){.nl-row{flex-direction:column}.nl-row .btn{width:100%}.nl-pop-card{padding:26px 20px 22px}.nl-pop-card h2{font-size:24px}}
 @media(prefers-reduced-motion:reduce){.nl-pop-card{animation:none}}
 """
