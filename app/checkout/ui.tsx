@@ -19,7 +19,13 @@ type Line = {
   unitPriceCents?: number;
 };
 
-export function CheckoutForm({ email: initialEmail }: { email: string }) {
+export function CheckoutForm({
+  email: initialEmail,
+  payNow = false,
+}: {
+  email: string;
+  payNow?: boolean;
+}) {
   const [lines, setLines] = useState<Line[]>([]);
   const [email, setEmail] = useState(initialEmail);
   const [country, setCountry] = useState("US");
@@ -102,6 +108,10 @@ export function CheckoutForm({ email: initialEmail }: { email: string }) {
         }
         localStorage.removeItem("k9_cart");
         window.dispatchEvent(new Event("k9-cart"));
+        if (result.checkoutUrl) {
+          window.location.href = result.checkoutUrl;
+          return;
+        }
         window.location.href = `/checkout/success?order=${result.number}`;
       }}
     >
@@ -154,11 +164,18 @@ export function CheckoutForm({ email: initialEmail }: { email: string }) {
         </label>
       </div>
       <div className="card" style={{ padding: 24, alignSelf: "start" }}>
-        <h3>Request summary</h3>
-        <p style={{ fontSize: 14 }}>
-          No payment is collected now. After you submit, we follow up to confirm the items and
-          arrange payment. Crypto checkout can be added later; this request is the live path today.
-        </p>
+        <h3>{payNow ? "Order summary" : "Request summary"}</h3>
+        {payNow ? (
+          <p style={{ fontSize: 14 }}>
+            You will be sent to Peer Pay&apos;s secure checkout to pay with Venmo, Cash App, PayPal,
+            Zelle or another enabled app. Your order is confirmed once payment settles.
+          </p>
+        ) : (
+          <p style={{ fontSize: 14 }}>
+            No payment is collected now. After you submit, we follow up to confirm the items and
+            arrange payment. Crypto checkout can be added later; this request is the live path today.
+          </p>
+        )}
         {lines.length ? (
           <ul style={{ paddingLeft: 18, fontSize: 14 }}>
             {lines.map((l) => (
@@ -191,7 +208,13 @@ export function CheckoutForm({ email: initialEmail }: { email: string }) {
         </p>
         {error ? <p className="disc">{error}</p> : null}
         <button className="btn" type="submit" disabled={busy || !lines.length} style={{ width: "100%" }}>
-          {busy ? "Sending request…" : "Request Order"}
+          {busy
+            ? payNow
+              ? "Opening secure checkout…"
+              : "Sending request…"
+            : payNow
+              ? "Continue to payment"
+              : "Request Order"}
         </button>
       </div>
     </form>

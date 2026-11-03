@@ -10,6 +10,7 @@ async function migrateAndSeed() {
   await query("alter table orders add column if not exists dog_name text");
   await query("alter table orders add column if not exists dog_weight text");
   await query("alter table orders add column if not exists contact_method text");
+  await query("alter table orders add column if not exists payment_amount_usdc text");
 
   for (const p of SEED_PRODUCTS) {
     await query(
