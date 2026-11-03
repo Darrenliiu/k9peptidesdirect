@@ -76,7 +76,8 @@ export async function checkoutAction(raw: unknown) {
       ok: true as const,
       orderId: result.id,
       number: result.number,
-      payment: result.payment,
+      checkoutUrl: result.payment.checkoutUrl ?? null,
+      payment: { provider: result.payment.provider, status: result.payment.status },
     };
   } catch (error) {
     return { ok: false as const, error: error instanceof Error ? error.message : "Checkout failed" };

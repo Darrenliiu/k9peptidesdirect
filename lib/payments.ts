@@ -133,6 +133,56 @@ async function stripeProvider(): Promise<PaymentProvider> {
   };
 }
 
+function peerpayOptions() {
+  const apiKey = process.env.PEERPAY_API_KEY;
+  if (!apiKey) throw new Error("PEERPAY_API_KEY is not set");
+  return {
+    apiKey,
+    apiBaseUrl: process.env.PEERPAY_API_BASE_URL || "https://api.pay.peer.xyz",
+    checkoutBaseUrl: process.env.PEERPAY_CHECKOUT_BASE_URL || "https://pay.peer.xyz",
+    signal: AbortSignal.timeout(20_000),
+  };
+}
+
+export function siteUrl() {
+  const explicit = process.env.NEXT_PUBLIC_SITE_URL || process.env.SITE_URL;
+  if (process.env.VERCEL_ENV === "preview" && process.env.VERCEL_BRANCH_URL) {
+    return `https://${process.env.VERCEL_BRANCH_URL}`;
+  }
+  if (explicit) return explicit.replace(/\/$/, "");
+  if (process.env.VERCEL_URL) return `https://${process.env.VERCEL_URL}`;
+  return "http://localhost:3000";
+}
+
+/** Peer Pay hosted checkout. Server-only: the API key never reaches the browser. */
+const peerpayProvider: PaymentProvider = {
+  id: "peerpay",
+  async createPayment(input) {
+    const { createCheckout } = await import("@zkp2p/pay-sdk");
+    const base = siteUrl();
+    const result = await createCheckout(
+      {
+        requestedFiatAmount: (input.amountCents / 100).toFixed(2),
+        requestedFiatCurrency: (input.currency || "USD").toUpperCase(),
+        idempotencyKey: input.orderId,
+        successUrl: `${base}/checkout/success?order=${encodeURIComponent(input.orderNumber)}`,
+        cancelUrl: `${base}/checkout?cancelled=${encodeURIComponent(input.orderNumber)}`,
+        notes: { merchantOrderId: input.orderId, orderNumber: input.orderNumber },
+      } as Parameters<typeof createCheckout>[0],
+      peerpayOptions(),
+    );
+    if (!result.checkoutUrl) {
+      throw new Error("Peer Pay did not return a checkout link. Please try again.");
+    }
+    return {
+      provider: "peerpay",
+      status: "pending",
+      reference: result.order.id,
+      checkoutUrl: result.checkoutUrl,
+    };
+  },
+};
+
 const CRYPTO_ALIASES = new Set(["crypto", "coinbase", "nowpayments", "btcpay"]);
 
 export function paymentProviderName() {
@@ -144,6 +194,7 @@ export async function getPaymentProvider(): Promise<PaymentProvider> {
   if (name === "stripe" && process.env.STRIPE_SECRET_KEY) {
     return stripeProvider();
   }
+  if (name === "peerpay") return peerpayProvider;
   if (CRYPTO_ALIASES.has(name)) {
     return {
       id: name,
@@ -158,6 +209,7 @@ export function paymentMode() {
   const name = paymentProviderName();
   if (name === "stripe" && process.env.STRIPE_SECRET_KEY) return "stripe" as const;
   if (CRYPTO_ALIASES.has(name)) return "crypto" as const;
+  if (name === "peerpay") return "peerpay" as const;
   if (name === "stub") return "stub" as const;
   return "request" as const;
 }

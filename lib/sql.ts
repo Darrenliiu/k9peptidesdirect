@@ -127,6 +127,12 @@ CREATE TABLE IF NOT EXISTS store_settings (
   currency TEXT NOT NULL DEFAULT 'USD',
   free_shipping_threshold_cents INTEGER DEFAULT 15000
 );
+CREATE TABLE IF NOT EXISTS webhook_events (
+  id TEXT PRIMARY KEY,
+  provider TEXT NOT NULL,
+  type TEXT NOT NULL,
+  received_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
 CREATE TABLE IF NOT EXISTS orders (
   id TEXT PRIMARY KEY,
   number TEXT NOT NULL UNIQUE,

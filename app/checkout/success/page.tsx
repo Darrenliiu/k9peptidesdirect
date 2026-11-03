@@ -2,6 +2,10 @@ import { Footer } from "@/components/storefront/Footer";
 import { Header } from "@/components/storefront/Header";
 
 import { noIndexSeo } from "@/lib/seo";
+import { getOrderByNumber } from "@/lib/orders";
+import { PaymentStatus } from "./status";
+
+export const dynamic = "force-dynamic";
 
 export const metadata = noIndexSeo("Order request received", "/checkout/success");
 
@@ -11,6 +15,25 @@ export default async function SuccessPage({
   searchParams: Promise<{ order?: string }>;
 }) {
   const { order } = await searchParams;
+  const row = order ? await getOrderByNumber(order).catch(() => null) : null;
+  if (order && row && row.paymentProvider === "peerpay") {
+    return (
+      <>
+        <Header />
+        <section className="sec">
+          <div className="w">
+            <PaymentStatus order={order} initial={row.paymentStatus} />
+            <p>
+              <a className="btn" href="/account/orders">
+                View order history
+              </a>
+            </p>
+          </div>
+        </section>
+        <Footer />
+      </>
+    );
+  }
   return (
     <>
       <Header />

@@ -166,6 +166,7 @@ export const orders = pgTable(
     paymentStatus: text("payment_status").notNull().default("unpaid"),
     paymentProvider: text("payment_provider"),
     paymentRef: text("payment_ref"),
+    paymentAmountUsdc: text("payment_amount_usdc"),
     subtotalCents: integer("subtotal_cents").notNull(),
     shippingCents: integer("shipping_cents").notNull(),
     taxCents: integer("tax_cents").notNull(),
