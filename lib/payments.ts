@@ -145,6 +145,8 @@ function peerpayOptions() {
 }
 
 export function siteUrl() {
+  const override = process.env.PEERPAY_RETURN_BASE_URL;
+  if (override) return override.replace(/\/$/, "");
   const explicit = process.env.NEXT_PUBLIC_SITE_URL || process.env.SITE_URL;
   if (process.env.VERCEL_ENV === "preview" && process.env.VERCEL_BRANCH_URL) {
     return `https://${process.env.VERCEL_BRANCH_URL}`;
