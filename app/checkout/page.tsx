@@ -4,32 +4,42 @@ import { noIndexSeo } from "@/lib/seo";
 import { getSession } from "@/lib/session";
 import { paymentMode } from "@/lib/payments";
 import { CheckoutForm } from "./ui";
+import "./checkout.css";
 
-export const metadata = noIndexSeo("Request Your Order", "/checkout");
+export const metadata = noIndexSeo("Checkout", "/checkout");
 
 export const dynamic = "force-dynamic";
 
-export default async function CheckoutPage() {
+export default async function CheckoutPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ cancelled?: string }>;
+}) {
   const session = await getSession();
-  const payNow = paymentMode() === "peerpay";
+  const { cancelled } = await searchParams;
+  const preview = process.env.CHECKOUT_UI_PREVIEW === "1";
+  const payNow = preview || paymentMode() === "peerpay";
   return (
     <>
       <Header />
-      <section className="sec">
+      <section className="co-wrap">
         <div className="w">
-          <h1 style={{ fontSize: 36 }}>{payNow ? "Checkout" : "Request Your Order"}</h1>
-          {payNow ? (
+          <div className="co-head">
+            <h1>{payNow ? "Checkout" : "Request Your Order"}</h1>
             <p>
-              Enter your shipping details, then pay securely through Peer Pay. Guest checkout is welcome
-              {session?.user.email ? "; this order will attach to your account." : "."}
+              {session?.user.email ? (
+                <>Signed in as <b>{session.user.email}</b>. This order will attach to your account.</>
+              ) : (
+                <>Guest checkout is welcome. <a href="/login?next=/checkout">Returning customer? Sign in</a></>
+              )}
             </p>
-          ) : (
-          <p>
-            No payment is taken on this page. Submit the request and our team will follow up to
-            confirm the order and arrange payment. Guest requests are welcome
-            {session?.user.email ? "; this request will attach to your account." : ". Sign in first if you want it attached to an account."}
-          </p>
-          )}
+          </div>
+          {preview ? (
+            <p className="co-banner">Preview build: placing orders is disabled here, so nothing is created or charged.</p>
+          ) : null}
+          {cancelled ? (
+            <p className="co-banner">Payment for order {cancelled} was not completed. You can try again below.</p>
+          ) : null}
           <CheckoutForm email={session?.user.email ?? ""} payNow={payNow} />
         </div>
       </section>

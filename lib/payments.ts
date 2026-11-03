@@ -15,6 +15,8 @@ export type CreatePaymentInput = {
   email: string;
   amountCents: number;
   currency: string;
+  /** Customer's chosen method: venmo | cashapp | zelle | paypal | crypto */
+  paymentMethod?: string;
 };
 
 export type PaymentProvider = {
@@ -157,6 +159,8 @@ export function siteUrl() {
 }
 
 /** Peer Pay hosted checkout. Server-only: the API key never reaches the browser. */
+export const FIAT_RAILS = new Set(["venmo", "cashapp", "zelle", "paypal"]);
+
 const peerpayProvider: PaymentProvider = {
   id: "peerpay",
   async createPayment(input) {
@@ -171,7 +175,14 @@ const peerpayProvider: PaymentProvider = {
         cancelUrl: `${base}/checkout?cancelled=${encodeURIComponent(input.orderNumber)}`,
         notes: { merchantOrderId: input.orderId, orderNumber: input.orderNumber },
       } as Parameters<typeof createCheckout>[0],
-      peerpayOptions(),
+      {
+        ...peerpayOptions(),
+        // Opens hosted checkout straight on the chosen app (?method=<rail>).
+        // Crypto has no single rail, so it lands on method selection.
+        ...(input.paymentMethod && FIAT_RAILS.has(input.paymentMethod)
+          ? { preselectedMethod: input.paymentMethod as "venmo" }
+          : {}),
+      },
     );
     if (!result.checkoutUrl) {
       throw new Error("Peer Pay did not return a checkout link. Please try again.");
