@@ -35,6 +35,7 @@ const schema = z.object({
   dogWeight: z.string().optional(),
   contactMethod: z.enum(CONTACT_METHODS),
   vetConfirmed: z.boolean(),
+  paymentMethod: z.enum(["zelle", "cashapp", "venmo", "paypal", "crypto"]).optional(),
 });
 
 export async function quoteAction(input: {
@@ -66,6 +67,9 @@ export async function checkoutAction(raw: unknown) {
     return { ok: false as const, error: "Please complete every required field." };
   }
   try {
+    if (process.env.CHECKOUT_UI_PREVIEW === "1") {
+      return { ok: false as const, error: "Preview build: orders are disabled here. Nothing was created or charged." };
+    }
     const session = await getSession();
     const result = await createOrder({
       ...parsed.data,

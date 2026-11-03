@@ -77,6 +77,7 @@ export async function createOrder(input: {
   dogWeight?: string;
   contactMethod?: ContactMethod | string;
   vetConfirmed: boolean;
+  paymentMethod?: string;
 }) {
   if (!input.vetConfirmed) {
     throw new Error("Please confirm veterinary supervision before checkout.");
@@ -160,6 +161,7 @@ export async function createOrder(input: {
     email,
     amountCents: total,
     currency: settings.currency,
+    paymentMethod: input.paymentMethod,
   });
 
   const mapped = paymentToOrder(payment.status);
