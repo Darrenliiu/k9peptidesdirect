@@ -32,7 +32,7 @@ fieldset.co-card{display:flex;flex-direction:column;gap:12px}
 .co-check{flex-direction:row!important;align-items:flex-start;gap:10px!important;font-weight:400!important;font-size:14px!important;line-height:1.45}
 .co-check input{accent-color:var(--blue,#087cf0);width:18px;height:18px;margin:2px 0 0;flex:none}
 .co-check a{color:var(--blue,#087cf0)}
-.co-cta{display:flex;justify-content:space-between;align-items:center;gap:12px;width:100%;border:0;border-radius:12px;background:var(--blue,#087cf0);color:#fff;font-size:17px;font-weight:700;padding:17px 20px;cursor:pointer}
+.co-cta{font-family:inherit;display:flex;justify-content:space-between;align-items:center;gap:12px;width:100%;border:0;border-radius:12px;background:var(--blue,#087cf0);color:#fff;font-size:17px;font-weight:700;padding:17px 20px;cursor:pointer}
 .co-cta:hover:not(:disabled){filter:brightness(.94)}
 .co-cta:disabled{opacity:.55;cursor:not-allowed}
 .co-err{color:#b42318;background:#fef3f2;border-radius:8px;padding:9px 12px;font-size:14px;margin:0}
@@ -45,7 +45,7 @@ fieldset.co-card{display:flex;flex-direction:column;gap:12px}
 .co-name small{display:block;color:#5a6478}
 .co-promo{display:flex;gap:8px}
 .co-promo input{flex:1;min-width:0;border:1px solid var(--line,#dde3ec);border-radius:9px;padding:10px 12px;font:inherit}
-.co-btn2{border:1px solid var(--ink,#292e4d);background:#fff;border-radius:9px;padding:0 16px;font-weight:600;cursor:pointer}
+.co-btn2{font-family:inherit;border:1px solid var(--ink,#292e4d);background:#fff;border-radius:9px;padding:0 16px;font-weight:600;cursor:pointer}
 .co-btn2:disabled{opacity:.45;cursor:not-allowed}
 .co-totals{display:grid;grid-template-columns:1fr auto;gap:8px;margin:16px 0 0;padding-top:14px;border-top:1px solid var(--line,#dde3ec);font-size:15px}
 .co-totals dd{margin:0;text-align:right}
