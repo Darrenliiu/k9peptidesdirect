@@ -9,7 +9,14 @@ export const metadata: Metadata = {
     template: `%s | ${SITE_NAME}`,
   },
   description: DEFAULT_DESCRIPTION,
-  icons: { icon: "/favicon.svg" },
+  icons: {
+    icon: [
+      { url: "/favicon.svg", type: "image/svg+xml" },
+      { url: "/icon.png", type: "image/png", sizes: "32x32" },
+    ],
+    shortcut: "/favicon.ico",
+    apple: [{ url: "/apple-icon.png", sizes: "180x180", type: "image/png" }],
+  },
   robots: { index: true, follow: true },
   openGraph: {
     type: "website",
