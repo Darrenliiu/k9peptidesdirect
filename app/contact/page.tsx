@@ -12,9 +12,9 @@ const crumbs = [
 export const metadata = pageSeo({
   title: "Contact",
   description:
-    "Contact K9 Peptides Direct for protocol questions, order support, and veterinary partnerships. Email support@k9peptidesdirect.com, Monday–Friday 9–5 PT.",
+    "Contact K9 Peptides Direct for product questions, order support, and veterinary or clinic inquiries. Email support@k9peptidesdirect.com, Monday–Friday 9–5 PT.",
   path: "/contact",
-  image: "/images/vet.webp",
+  image: "/images/t1.webp",
 });
 
 export default function ContactPage() {
@@ -22,11 +22,11 @@ export default function ContactPage() {
     <>
       <JsonLd data={graphJsonLd([organizationJsonLd(), breadcrumbJsonLd(crumbs)])} />
       <Header />
-      <section className="ban" style={{ backgroundImage: "url(/images/vet.webp)" }}>
+      <section className="ban" style={{ backgroundImage: "url(/images/t1.webp)" }}>
         <div className="w">
           <h1>Talk to our team</h1>
           <p style={{ fontSize: 18, opacity: 0.9 }}>
-            Protocol questions, vet partnerships and order support.
+            Product questions, order support and veterinary or clinic inquiries.
           </p>
         </div>
       </section>
@@ -62,7 +62,7 @@ export default function ContactPage() {
             <select name="topic">
               <option>Topic: Order</option>
               <option>Protocol question</option>
-              <option>Vet partnership</option>
+              <option>Veterinary / clinic inquiry</option>
             </select>
             <input name="dog" placeholder="Dog breed & weight" />
             <textarea name="message" rows={5} placeholder="Message" />

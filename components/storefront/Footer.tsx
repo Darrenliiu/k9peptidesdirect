@@ -17,7 +17,7 @@ export function Footer() {
           <div className="foot-grid">
             <div>
               <Logo light />
-              <p>Research-grade peptides formulated and dosed for canine wellness. Lab-verified, vet-informed.</p>
+              <p>Research-grade peptides formulated and dosed for canine wellness. Third-party lab tested, with published COAs.</p>
             </div>
             <div>
               <h4>Shop</h4>

@@ -131,7 +131,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
                 ? `✓ Latest COA lot ${publishedCoas[0].lot}`
                 : "COA coming soon"}
               {" · "}
-              ✓ Cold-pack shipping · ✓ Vet screening included
+              ✓ Cold-pack shipping · ✓ Third-party lab tested
             </p>
             <details open>
               <summary>Research overview</summary>
