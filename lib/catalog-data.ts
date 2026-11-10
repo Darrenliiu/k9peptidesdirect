@@ -136,7 +136,7 @@ export const SEED_PRODUCTS: SeedProduct[] = [
     category: "Wellness",
     shortDescription: "Essential B vitamins supporting energy metabolism.",
     description:
-      "Essential B vitamins supporting energy metabolism in active and senior dogs. Formulated for veterinary-guided use.",
+      "Essential B vitamins supporting energy metabolism in active and senior dogs. For research and veterinary-supervised use only.",
     priceCents: 8000,
     salePriceCents: null,
     stock: 6,
@@ -226,7 +226,7 @@ export const SEED_PRODUCTS: SeedProduct[] = [
     name: "Starter Pack",
     sku: "K9-PACK-START",
     category: "Bundles",
-    shortDescription: "BPC-157 + B-Complex to begin a vet-guided protocol.",
+    shortDescription: "BPC-157 + B-Complex, a simple place to start.",
     description:
       "A first-protocol bundle: BPC-157 with B-Complex for energy metabolism support.",
     priceCents: 13900,
