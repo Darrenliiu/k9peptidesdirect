@@ -12,7 +12,7 @@ const crumbs = [
 export const metadata = pageSeo({
   title: "About Us",
   description:
-    "K9 Peptides Direct supplies research-grade canine peptides with third-party testing, cold-chain shipping, and veterinary-guided use. Learn our lab and vet standards.",
+    "K9 Peptides Direct supplies research-grade canine peptides with third-party testing, cold-chain shipping, and veterinary-guided use. Learn our lab and testing standards.",
   path: "/about",
   image: "/images/t2.webp",
 });
@@ -60,21 +60,22 @@ export default function AboutPage() {
       <section className="sec alt">
         <div className="w split">
           <div>
-            <h2>Vet network</h2>
+            <h2>Made to use with your own vet</h2>
             <p>
-              Licensed veterinarians review each intake. Rehab specialists help shape our recovery
-              protocols. Read the{" "}
+              We don&apos;t provide veterinary consults or screening. Bring the research guide and the
+              product&apos;s COA to your own veterinarian, who decides whether any protocol is right for
+              your dog. Read the{" "}
               <a href="/dosing" style={{ color: "var(--blue)" }}>
                 research guide
               </a>{" "}
               or{" "}
               <a href="/contact" style={{ color: "var(--blue)" }}>
-                start an intake
+                contact us
               </a>
               .
             </p>
           </div>
-          <img src="/images/rehab.webp" alt="Canine rehabilitation work with a therapist" loading="lazy" width={720} height={480} />
+          <img src="/images/t3.webp" alt="Owner relaxing at home with her dog" loading="lazy" width={720} height={480} />
         </div>
       </section>
       <section className="sec">
@@ -86,7 +87,7 @@ export default function AboutPage() {
           </div>
           <div className="card">
             <div className="b">
-              <h3>Vet network</h3>Licensed veterinarians review intake forms.
+              <h3>Cold-chain shipping</h3>Insulated cold-pack packaging on every order.
             </div>
           </div>
           <div className="card">

@@ -51,7 +51,7 @@ export default async function HomePage() {
       <section className="pl-hero">
         <img className="pl-hero-bg" src="/images/run.webp" alt="Dog running along a beach at sunset" width={1280} height={720} fetchPriority="high" />
         <div className="pl-hero-in">
-          <p className="eyebrow">Lab-verified · Vet-informed</p>
+          <p className="eyebrow">Lab-verified · COAs published</p>
           <h1>
             Peptide support for the dogs who <em>give everything.</em>
           </h1>

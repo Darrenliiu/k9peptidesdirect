@@ -20,11 +20,11 @@ export const metadata = pageSeo({
 const QA = [
   {
     q: "Are peptides safe for dogs?",
-    a: "Research is emerging and products are sold for research and veterinary-guided use only. We ask for a veterinary consult before any protocol. They are not intended to diagnose, treat, cure, or prevent disease.",
+    a: "Research is emerging and products are sold for research and veterinary-guided use only. Talk to your own veterinarian before starting any protocol. They are not intended to diagnose, treat, cure, or prevent disease.",
   },
   {
     q: "Do I need a prescription?",
-    a: "Products are sold for research and vet-guided use. Our intake form on the contact page connects you with a veterinarian.",
+    a: "Products are sold for research and veterinary-guided use. We don't provide veterinary consults, screening or prescriptions, so talk to your own veterinarian about whether any protocol is appropriate.",
   },
   {
     q: "How are products shipped?",

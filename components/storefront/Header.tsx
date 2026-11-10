@@ -116,7 +116,7 @@ export function Header() {
     <>
       <div className="bar">
         Free cold-pack shipping $150+
-        <span className="dk"> · Third-party tested · Vet-consult support</span>
+        <span className="dk"> · Third-party tested · COAs published</span>
       </div>
       <header>
         <div className="w">

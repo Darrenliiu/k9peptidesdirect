@@ -27,6 +27,6 @@ export const MEGA_FEATURE = {
   image: "/images/joint-pack.webp",
   alt: "Joint & Recovery Pack — BPC-157 and TB-500 bundle",
   title: "Protocol bundles",
-  text: "Vet-guided stacks for recovery, seniors, and working dogs.",
+  text: "Matched stacks for recovery, seniors, and working dogs.",
   cta: "Shop all",
 };

@@ -328,7 +328,7 @@ Those papers are why a [Senior Vitality Pack](/product/senior-pack) is labeled a
 - Do not use [extra-label drug rules](https://www.fda.gov/animal-veterinary/resources-you/ins-and-outs-extra-label-drug-use-animals-resource-veterinarians) as a home license. Extra-label use is a veterinarian’s pathway for approved drugs inside a VCPR.
 - If you later browse research vials, read [what peptides are](/blog/what-are-peptides) and [how to read a COA](/blog/how-to-read-a-coa) before treating a purity number as a clinical argument.
 
-[Contact](/contact) can start a veterinary-guided intake. The [research guide](/dosing) remains educational. The care that professional bodies actually describe for senior dogs is examination, history, and follow-up — not a promise that any peptide will restore youth.`,
+[Contact](/contact) us with product or order questions; we don’t provide veterinary consults or screening. The [research guide](/dosing) remains educational. The care that professional bodies actually describe for senior dogs is examination, history, and follow-up — not a promise that any peptide will restore youth.`,
   },
   {
     slug: "how-to-read-a-coa",
