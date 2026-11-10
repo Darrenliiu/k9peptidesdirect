@@ -90,3 +90,6 @@ fieldset.co-card{display:flex;flex-direction:column;gap:12px}
 .co-grand{font-family:var(--serif,Georgia,serif);font-weight:600;color:var(--navy,#003366)}
 .co-toggle{background:#fff;border-color:var(--line,#e9e0d3);border-radius:999px;color:var(--blue,#0b6fd8)}
 .co-err{border-radius:12px}
+/* keep the visually-hidden payment radios inside their tab (fixes horizontal overflow) */
+.co-tab{position:relative}
+.co-tab input{top:0;left:0;width:1px!important;height:1px;min-height:0;margin:0}
