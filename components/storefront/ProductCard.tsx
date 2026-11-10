@@ -24,17 +24,17 @@ export function ProductCard({ product }: { product: CardProduct }) {
           width={480}
           height={480}
           decoding="async"
-          style={{ width: "100%", height: "100%", objectFit: "cover" }}
         />
       </div>
       <div className="b">
         <span className="tag">{product.category}</span>
-        <h3 style={{ margin: "10px 0 4px" }}>{product.name}</h3>
-        <p style={{ fontSize: 14, margin: "0 0 10px" }}>{product.shortDescription}</p>
+        <h3>{product.name}</h3>
+        <p>{product.shortDescription}</p>
+        <span className="card-f">
         <span className="price">
           {sale ? (
             <>
-              <s style={{ opacity: 0.55, marginRight: 8, fontWeight: 500 }}>
+              <s className="was">
                 {formatMoney(product.priceCents)}
               </s>
               {formatMoney(price)}
@@ -42,6 +42,10 @@ export function ProductCard({ product }: { product: CardProduct }) {
           ) : (
             formatMoney(price).replace(".00", "")
           )}
+        </span>
+        <span className="card-go" aria-hidden>
+          →
+        </span>
         </span>
       </div>
     </a>

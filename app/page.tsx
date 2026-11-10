@@ -3,7 +3,10 @@ import { Header } from "@/components/storefront/Header";
 import { JsonLd } from "@/components/storefront/JsonLd";
 import { NewsletterCta } from "@/components/storefront/Newsletter";
 import { ProductCard } from "@/components/storefront/ProductCard";
-import { featuredProducts } from "@/lib/catalog";
+import { featuredProducts, listProducts } from "@/lib/catalog";
+import { Paw } from "@/components/storefront/Logo";
+import { formatMoney, displayPrice } from "@/lib/money";
+import { BUNDLE_INCLUDES, SEED_PRODUCTS } from "@/lib/catalog-data";
 import { ensureReady } from "@/lib/ensure";
 import { hasDatabase } from "@/lib/db";
 import { pageSeo } from "@/lib/seo";
@@ -18,97 +21,95 @@ export const metadata = pageSeo({
 });
 
 const GOALS = [
-  { g: "Joint & Mobility", d: "Arthritis, hips, aging joints", i: "goal-joint", href: "/product/joint-pack" },
-  { g: "Surgery Recovery", d: "Pre/post-op tissue support", i: "goal-surgery", href: "/product/bpc-157" },
-  { g: "Senior Longevity", d: "Energy and cellular health", i: "goal-senior", href: "/product/senior-pack" },
-  { g: "Working & Sport", d: "Performance and fast recovery", i: "goal-performance", href: "/product/performance-pack" },
+  { g: "Joint & Mobility", d: "Aging joints, hips, everyday movement", i: "goal-joint", href: "/product/joint-pack", tone: "sky" },
+  { g: "Surgery Recovery", d: "Pre/post-op tissue research", i: "goal-surgery", href: "/product/bpc-157", tone: "sage" },
+  { g: "Senior Longevity", d: "Energy and cellular health", i: "goal-senior", href: "/product/senior-pack", tone: "sand" },
+  { g: "Working & Sport", d: "Performance and fast recovery", i: "goal-performance", href: "/product/performance-pack", tone: "dusk" },
 ] as const;
 
-const GALLERY = [
-  { i: "run", alt: "Dog running across a field" },
-  { i: "goal-performance", alt: "Sport dog in training" },
-  { i: "rehab", alt: "Canine rehab session" },
-  { i: "goal-joint", alt: "Senior dog on a walk" },
-  { i: "t1", alt: "Handler with a working dog" },
-  { i: "goal-senior", alt: "Older companion dog outdoors" },
+const FAQS = [
+  { q: "Where can I see lab results?", a: "Every published certificate of analysis lives in the COA library, searchable by product and lot number." },
+  { q: "How is my order shipped?", a: "Orders ship in insulated cold-pack packaging to help protect lyophilized vials in transit." },
+  { q: "What comes in the box?", a: "Single vials include bacteriostatic water, insulin syringes, alcohol pads and a weight-based dosing card." },
+  { q: "How can I pay?", a: "Checkout supports Zelle, Cash App, Venmo, PayPal and crypto." },
 ] as const;
+
+const NAMES = new Map(SEED_PRODUCTS.map((p) => [p.slug, p.name]));
+const includes = (slug: string) => (BUNDLE_INCLUDES[slug] ?? []).map((s) => NAMES.get(s) ?? s).join(" + ");
 
 export default async function HomePage() {
   if (hasDatabase()) await ensureReady();
   const featured = await featuredProducts();
+  const bundles = (await listProducts()).filter((p) => p.category === "Bundles");
+  const [lead, ...rest] = bundles;
 
   return (
     <>
-      <link rel="preload" as="image" href="/images/hero-dog.webp" fetchPriority="high" />
+      <link rel="preload" as="image" href="/images/run.webp" fetchPriority="high" />
       <JsonLd data={graphJsonLd([organizationJsonLd(), websiteJsonLd()])} />
       <Header />
-      <section className="fb" style={{ backgroundImage: "url(/images/hero-dog.webp)" }}>
-        <div className="w">
-          <div className="c">
-            <span className="tag">Lab-verified · Vet-informed</span>
-            <h1>Peptide support built for the dogs who give everything.</h1>
-            <p style={{ fontSize: 19, opacity: 0.9 }}>
-              Recovery, mobility, longevity and performance protocols — precision-dosed for canine
-              body weight and backed by third-party COAs.
-            </p>
-            <a className="btn" href="/shop">
-              Shop Peptides
-            </a>{" "}
-            &nbsp;
-            <a className="btn o" href="/dosing">
-              Find a Protocol
-            </a>
+      <section className="pl-hero">
+        <img className="pl-hero-bg" src="/images/run.webp" alt="Dog running along a beach at sunset" width={1280} height={720} fetchPriority="high" />
+        <div className="pl-hero-in">
+          <p className="eyebrow">Lab-verified · Vet-informed</p>
+          <h1>
+            Peptide support for the dogs who <em>give everything.</em>
+          </h1>
+          <p className="pl-lede">
+            Recovery, mobility, longevity and performance protocols, precision-dosed for canine body weight and backed by
+            third-party COAs.
+          </p>
+          <div className="pl-cta">
+            <a className="btn" href="/shop">Shop Peptides</a>
+            <a className="btn glass" href="/dosing">Find a Protocol</a>
           </div>
         </div>
+        <ul className="pl-badges" aria-label="Why K9 Peptides Direct">
+          <li>🧪 Third-party HPLC tested</li>
+          <li>❄️ Cold-pack shipping</li>
+          <li>📄 Batch COAs published</li>
+        </ul>
       </section>
+
+      <section className="pl-trust" aria-label="Our standards">
+        <div className="w">
+          <div><b>99%+ purity</b><span>Third-party HPLC tested</span></div>
+          <div><b>Cold-chain</b><span>Insulated shipping</span></div>
+          <div><b>COA library</b><span>Every batch published</span></div>
+          <div><b>Dosing card</b><span>Weight-based, in every box</span></div>
+        </div>
+      </section>
+
       <section className="sec">
-        <div className="w trust">
-          <div>
-            <p>
-              <strong>🧪 99%+ Purity</strong>
-            </p>
-            Third-party HPLC tested
-          </div>
-          <div>
-            <p>
-              <strong>🩺 Vet-Consult</strong>
-            </p>
-            Screening before protocols
-          </div>
-          <div>
-            <p>
-              <strong>❄️ Cold-Chain</strong>
-            </p>
-            Insulated shipping
-          </div>
-          <div>
-            <p>
-              <strong>📄 COA Library</strong>
-            </p>
-            Every batch published
-          </div>
-        </div>
-      </section>
-      <section className="sec alt">
         <div className="w">
-          <h2>Shop by goal</h2>
-          <p>Choose a goal — we&apos;ll match the protocol.</p>
-          <div className="grid">
+          <div className="pl-head">
+            <p className="eyebrow">Shop by goal</p>
+            <h2>What does your dog <em>need</em> most?</h2>
+          </div>
+          <div className="pl-goals">
             {GOALS.map((g) => (
-              <a className="goal" href={g.href} key={g.i}>
-                <img src={`/images/${g.i}.webp`} alt={g.g} loading="lazy" width={560} height={360} />
-                <div>
+              <a className={`pl-goal tone-${g.tone}`} href={g.href} key={g.i}>
+                <span className="pl-goal-c">
                   <h3>{g.g}</h3>
-                  <p style={{ margin: "4px 0 0" }}>{g.d} →</p>
-                </div>
+                  <span>{g.d}</span>
+                  <span className="pl-more">Explore →</span>
+                </span>
+                <img src={`/images/${g.i}.webp`} alt={g.g} loading="lazy" width={576} height={432} />
               </a>
             ))}
           </div>
         </div>
       </section>
-      <section className="sec">
+
+      <section className="sec alt">
         <div className="w">
-          <h2>Best sellers</h2>
+          <div className="pl-head row">
+            <div>
+              <p className="eyebrow">Favorites</p>
+              <h2>Best sellers</h2>
+            </div>
+            <a className="pl-link" href="/shop">Shop all →</a>
+          </div>
           <div className="grid">
             {featured.map((p) => (
               <ProductCard key={p.id} product={p} />
@@ -116,93 +117,96 @@ export default async function HomePage() {
           </div>
         </div>
       </section>
-      <section className="stats">
-        <div className="w">
-          <div>
-            <b>12k+</b>Dogs supported
-          </div>
-          <div>
-            <b>99.2%</b>Avg. HPLC purity
-          </div>
-          <div>
-            <b>48</b>Partner vets
-          </div>
-        </div>
-      </section>
-      <section className="sec">
-        <div className="w split">
-          <img src="/images/lab.webp" alt="Independent quality-control laboratory" loading="lazy" width={720} height={480} />
-          <div>
-            <span className="tag">Quality first</span>
-            <h2>Every batch, independently verified</h2>
-            <p>
-              Each lot is HPLC- and mass-spec-tested by an independent lab before it ships.
-              Certificates are published for every batch number printed on your vial. See the{" "}
-              <a href="/about" style={{ color: "var(--blue)" }}>
-                quality standard
-              </a>{" "}
-              and{" "}
-              <a href="/faq" style={{ color: "var(--blue)" }}>
-                COA questions
+
+      {lead ? (
+        <section className="sec">
+          <div className="w">
+            <div className="pl-head row">
+              <div>
+                <p className="eyebrow">Protocol bundles</p>
+                <h2>Matched vials, <em>one goal</em></h2>
+              </div>
+              <a className="pl-link" href="/bundles">All bundles →</a>
+            </div>
+            <div className="pl-bento">
+              <a className="pl-b1" href={`/product/${lead.slug}`}>
+                <img src={lead.image} alt={lead.name} loading="lazy" width={600} height={600} />
+                <span>
+                  <span className="eyebrow">Most complete</span>
+                  <h3>{lead.name}</h3>
+                  <span className="pl-inc">{includes(lead.slug)}</span>
+                  <b>{formatMoney(displayPrice(lead))}</b>
+                </span>
               </a>
-              .
-            </p>
-            <a className="btn n" href="/about">
-              Our standards
-            </a>
+              {rest.slice(0, 4).map((b) => (
+                <a className="pl-bx" href={`/product/${b.slug}`} key={b.id}>
+                  <img src={b.image} alt={b.name} loading="lazy" width={300} height={300} />
+                  <span>
+                    <h3>{b.name}</h3>
+                    <span className="pl-inc">{includes(b.slug)}</span>
+                    <b>{formatMoney(displayPrice(b))}</b>
+                  </span>
+                </a>
+              ))}
+              <div className="pl-bq">
+                <Paw className="pl-bq-paw" />
+                <div>
+                  <h3>Protocol bundles</h3>
+                  <p>Pre-matched vials for a single goal, each with a weight-based dosing card.</p>
+                </div>
+                <a className="btn light" href="/bundles">See all bundles</a>
+              </div>
+            </div>
           </div>
+        </section>
+      ) : null}
+
+      <section className="pl-lab">
+        <img src="/images/lab.webp" alt="Independent quality-control laboratory" loading="lazy" width={1280} height={720} />
+        <div className="pl-lab-c">
+          <p className="eyebrow">Quality first</p>
+          <h2>Tested by a lab, <em>not just trusted.</em></h2>
+          <ul className="pl-checks">
+            <li><b>Independent testing</b><span>Each lot is HPLC- and mass-spec-tested by an independent lab before it ships.</span></li>
+            <li><b>Traceable batches</b><span>Certificates are published for every batch number printed on your vial.</span></li>
+            <li><b>Shipped cold</b><span>Insulated cold-pack packaging on every order.</span></li>
+          </ul>
+          <p>
+            See the <a href="/about">quality standard</a> and <a href="/faq">COA questions</a>.
+          </p>
+          <a className="btn n" href="/coa">Browse COAs</a>
         </div>
       </section>
-      <section className="sec alt">
-        <div className="w split">
-          <div>
-            <span className="tag">Vet-guided</span>
-            <h2>Screened by veterinarians, not algorithms</h2>
-            <p>
-              Our intake connects you with licensed vets who review your dog&apos;s history before any
-              protocol is fulfilled. Start from{" "}
-              <a href="/contact" style={{ color: "var(--blue)" }}>
-                contact
-              </a>{" "}
-              or browse the{" "}
-              <a href="/dosing" style={{ color: "var(--blue)" }}>
-                research guide
-              </a>
-              .
-            </p>
-            <a className="btn" href="/contact">
-              Start intake
-            </a>
-          </div>
-          <img src="/images/vet.webp" alt="Veterinarian examining a dog" loading="lazy" width={720} height={480} />
-        </div>
-      </section>
+
       <section className="sec">
-        <div className="w gal">
-          {GALLERY.map((g) => (
-            <img key={g.i} src={`/images/${g.i}.webp`} alt={g.alt} loading="lazy" width={400} height={300} />
-          ))}
+        <div className="w">
+          <div className="pl-head center">
+            <p className="eyebrow">How it works</p>
+            <h2>Three simple <em>steps</em></h2>
+          </div>
+          <ol className="pl-steps">
+            <li><h3>Pick a goal</h3><p>Mobility, recovery, longevity or performance. Start with a single vial or a bundle.</p></li>
+            <li><h3>Talk to your vet</h3><p>Review the <a href="/dosing">research guide</a> together, or <a href="/contact">contact us</a> with questions. Always follow your veterinarian&apos;s direction.</p></li>
+            <li><h3>Dose by weight</h3><p>Every vial ships with a weight-based dosing card for small, medium and large dogs.</p></li>
+          </ol>
         </div>
       </section>
+
       <section className="sec alt">
-        <div className="w">
-          <h2>How it works</h2>
-          <div className="grid">
-            <div className="card">
-              <div className="b">
-                <h3>1 · Take the finder quiz</h3>Tell us breed, weight, age and goals.
-              </div>
-            </div>
-            <div className="card">
-              <div className="b">
-                <h3>2 · Vet screening</h3>Quick health intake reviewed before shipping.
-              </div>
-            </div>
-            <div className="card">
-              <div className="b">
-                <h3>3 · Pre-dosed protocol</h3>Weight-based dosing chart in every box.
-              </div>
-            </div>
+        <div className="w pl-faq">
+          <div>
+            <p className="eyebrow">Questions</p>
+            <h2>Good to <em>know</em></h2>
+            <p><a className="pl-link" href="/faq">Read the full FAQ →</a></p>
+            <img src="/images/goal-senior.webp" alt="Senior dog resting outdoors" loading="lazy" width={576} height={432} />
+          </div>
+          <div>
+            {FAQS.map((f) => (
+              <details className="pl-q" key={f.q}>
+                <summary>{f.q}</summary>
+                <p>{f.a}</p>
+              </details>
+            ))}
           </div>
         </div>
       </section>

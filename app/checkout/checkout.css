@@ -67,3 +67,26 @@ fieldset.co-card{display:flex;flex-direction:column;gap:12px}
   .co-tabs{grid-template-columns:repeat(3,1fr)}
   .co-card{padding:16px}
 }
+/* ---- Pack Life restyle (visual only) ---- */
+.co-wrap{background:var(--warm,#fbf6ef);padding:36px 0 72px}
+.co-head h1{font-size:clamp(32px,4vw,48px)}
+.co-head p{color:var(--mute,#5f5b55)}
+.co-banner{background:#fff4e2;border-color:#f0d6a8;border-radius:14px}
+.co-card{border:0;border-radius:22px;padding:24px;box-shadow:0 1px 0 var(--line,#e9e0d3),0 10px 30px #5a3e1a0d}
+.co-card legend{font-family:var(--serif,Georgia,serif);font-weight:500;font-size:21px;color:var(--navy,#003366)}
+.co-step{background:linear-gradient(135deg,#9a5d24,#c98a4b);font-family:var(--sans,system-ui);font-weight:700}
+.co-card label{color:#3d4150}
+.co-card input:not([type=radio]):not([type=checkbox]),.co-card select,.co-card textarea,.co-promo input{border-radius:14px;border-color:#dccfbd;padding:12px 14px}
+.co-radio,.co-tab{border-color:#e3d7c6;border-radius:16px;background:#fff}
+.co-radio:hover,.co-tab:hover{border-color:#c9b79f}
+.co-radio.on,.co-tab.on{background:#eef5fd}
+.co-ico{border-radius:12px}
+.co-how{background:var(--bg,#f4ece1);border-radius:16px}
+.co-cta{border-radius:999px;padding:18px 26px;background:var(--blue,#0b6fd8);transition:transform .2s,box-shadow .2s}
+.co-cta:hover:not(:disabled){filter:none;transform:translateY(-1px);box-shadow:0 12px 26px #0b6fd840}
+.co-btn2{border-radius:999px;border-color:var(--navy,#003366);color:var(--navy,#003366)}
+.co-side h2{font-family:var(--serif,Georgia,serif);font-weight:500;font-size:24px;color:var(--navy,#003366)}
+.co-qty{border-radius:999px;background:#f6e3cc;color:#7a4517}
+.co-grand{font-family:var(--serif,Georgia,serif);font-weight:600;color:var(--navy,#003366)}
+.co-toggle{background:#fff;border-color:var(--line,#e9e0d3);border-radius:999px;color:var(--blue,#0b6fd8)}
+.co-err{border-radius:12px}
