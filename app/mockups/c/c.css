@@ -89,7 +89,7 @@
 @media(max-width:1000px){.mc-goals,.mc-products{grid-template-columns:repeat(2,1fr)}.mc-bento{grid-template-columns:1fr 1fr}.mc-b1{grid-row:auto;grid-column:span 2}.mc-b1 img{aspect-ratio:16/10}}
 @media(max-width:820px){
 .mc header.mc-nav{grid-template-columns:auto 1fr;}.mc .mc-links{display:none}.mc-actions a:first-child{display:none}
-.mc-hero{min-height:620px;border-radius:24px}.mc-hero-badges{display:none}
+.mc-hero{min-height:620px;border-radius:24px}.mc-hero-bg{object-position:58% center}.mc-hero-badges{display:none}
 .mc-trust,.mc-faq{grid-template-columns:1fr}.mc-steps{grid-template-columns:1fr}
 .mc-bento{grid-template-columns:1fr}.mc-b1,.mc-bq{grid-column:auto}.mc-bq{grid-template-columns:1fr}.mc-bq svg,.mc-bq .mc-btn,.mc-bq p{grid-row:auto;grid-column:auto}.mc-bq .mc-btn{justify-self:start;margin-top:10px}
 .mc-b1 img{aspect-ratio:4/3}.mc-head.row{flex-direction:column;align-items:flex-start;gap:10px}.mc-foot-grid{grid-template-columns:1fr 1fr}
